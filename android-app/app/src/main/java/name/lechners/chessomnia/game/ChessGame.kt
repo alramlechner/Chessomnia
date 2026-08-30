@@ -114,11 +114,15 @@ class ChessGame private constructor(
         return record
     }
 
-    fun resign(side: Side) { status = GameStatus.Resigned(side.opposite); clock = clock.copy(runningFor = null) }
-
-    fun agreeDraw() { status = GameStatus.AgreedDraw; clock = clock.copy(runningFor = null) }
-
-    /** Sets an outcome that does NOT follow from the move list (used when restoring). */
+    /**
+     * Sets an outcome that does NOT follow from the move list (used when restoring).
+     *
+     * ⚠️ The only remaining caller is the restore path. Resigning and agreeing a draw
+     * were dropped from the UI: nothing is recorded anywhere, so how a game ends makes
+     * no difference - whoever wants to stop simply starts a new one. GameStatus keeps
+     * Resigned and AgreedDraw regardless, because a game saved by an older version can
+     * still carry those codes and has to load.
+     */
     fun restoreResult(status: GameStatus) { this.status = status }
 
     fun restoreClock(state: ClockState) { clock = state }

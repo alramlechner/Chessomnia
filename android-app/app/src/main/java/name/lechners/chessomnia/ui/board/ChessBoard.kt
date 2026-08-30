@@ -47,6 +47,13 @@ fun ChessBoard(
     showCoordinates: Boolean,
     onSquareTap: (Square) -> Unit,
     modifier: Modifier = Modifier,
+    /**
+     * Draws the empty board: no pieces, no hints, no highlights. Used by the pause
+     * curtain, where the point is that the position cannot be studied while the clock
+     * is stopped. The squares and the coordinates stay - they carry no information
+     * about the game.
+     */
+    piecesHidden: Boolean = false,
 ) {
     val painters = rememberPiecePainters()
     val textMeasurer = rememberTextMeasurer()
@@ -66,20 +73,23 @@ fun ChessBoard(
         val geo = BoardGeometry(size.minDimension, bottomSide)
 
         drawSquares(geo)
-        lastMove?.let {
-            fillSquare(geo, it.from, BoardColors.lastMove)
-            fillSquare(geo, it.to, BoardColors.lastMove)
+
+        if (!piecesHidden) {
+            lastMove?.let {
+                fillSquare(geo, it.from, BoardColors.lastMove)
+                fillSquare(geo, it.to, BoardColors.lastMove)
+            }
+            checkedKing?.let { drawCheckGlow(geo, it) }
+            selected?.let { fillSquare(geo, it, BoardColors.selection) }
+
+            // Castling and en passant touch squares that are neither origin nor target.
+            // Making exactly those visible is the actual learning effect.
+            for (m in hints) drawSecondarySquares(geo, m)
+
+            drawPieces(geo, board, painters, bottomSide)
+
+            for (m in hints) drawMoveHint(geo, m, board)
         }
-        checkedKing?.let { drawCheckGlow(geo, it) }
-        selected?.let { fillSquare(geo, it, BoardColors.selection) }
-
-        // Castling and en passant touch squares that are neither origin nor target.
-        // Making exactly those visible is the actual learning effect.
-        for (m in hints) drawSecondarySquares(geo, m)
-
-        drawPieces(geo, board, painters, bottomSide)
-
-        for (m in hints) drawMoveHint(geo, m, board)
 
         if (showCoordinates) drawCoordinates(geo, textMeasurer)
     }

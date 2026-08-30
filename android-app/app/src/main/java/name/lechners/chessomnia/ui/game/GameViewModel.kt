@@ -42,6 +42,7 @@ data class GameUiState(
     val moveCount: Int = 0,
     val halfmoveClock: Int = 0,
     val showCoordinates: Boolean = true,
+    val allowTakeback: Boolean = true,
     val bottomSide: Side = Side.WHITE,
     /** Pieces captured by White (that is, black ones). */
     val capturedByWhite: List<Piece> = emptyList(),
@@ -111,6 +112,15 @@ class GameViewModel(
     private val _clock = MutableStateFlow(ClockUiState())
     val clock: StateFlow<ClockUiState> = _clock.asStateFlow()
 
+    /**
+     * Whether the board is covered because the players took a break. Its own flow, not
+     * derived from the clock: see [pauseByUser] for why "paused" and "curtain drawn" are
+     * not the same thing. Deliberately not persisted - coming back to a covered board
+     * after a restart would only be puzzling.
+     */
+    private val _curtain = MutableStateFlow(false)
+    val curtain: StateFlow<Boolean> = _curtain.asStateFlow()
+
     /** There is a resumable game (started and not finished). */
     val hasResumableGame: Boolean
         get() = game.moveCount > 0 && !game.status.isOver
@@ -179,12 +189,9 @@ class GameViewModel(
         publish(Selection.None)
     }
 
-    fun resign(side: Side) { game.resign(side); persist(); publish(Selection.None) }
-
-    fun agreeDraw() { game.agreeDraw(); persist(); publish(Selection.None) }
-
     fun startOrResumeClock() {
         game.startClock(now())
+        _curtain.value = false
         publishClock()
     }
 
@@ -193,6 +200,20 @@ class GameViewModel(
         game.pauseClock(now())
         persist()
         publishClock()
+    }
+
+    /**
+     * Pausing deliberately, by pressing the button - as opposed to the clock stopping
+     * on its own.
+     *
+     * ⚠️ The distinction matters. The clock also pauses after a takeback and when the
+     * game screen is left, and drawing the curtain in those cases would be wrong: a
+     * takeback is followed by exactly the discussion in which both players want to look
+     * at the position.
+     */
+    fun pauseByUser() {
+        pauseClock()
+        _curtain.value = true
     }
 
     /** A new game - only ever on an explicit request. */
@@ -227,6 +248,7 @@ class GameViewModel(
             moveCount = game.moveCount,
             halfmoveClock = game.halfmoveClock,
             showCoordinates = settings.showCoordinates,
+            allowTakeback = settings.allowTakeback,
             bottomSide = settings.boardBottomSide,
             capturedByWhite = game.capturedBy(Side.WHITE),
             capturedByBlack = game.capturedBy(Side.BLACK),

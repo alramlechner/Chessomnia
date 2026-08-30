@@ -49,6 +49,14 @@ class ChessomniaPrefs(context: Context) {
             // on tablets, the target device. Clean up the orphaned key.
             prefs.edit().remove(KEY_ORIENTATION).apply()
         }
+        if (version < 4) {
+            // v4: "confirm takeback" became "allow takeback". The old value is NOT
+            // carried over, because the two mean different things: switching a prompt
+            // off is not the same as giving up the feature. Everyone therefore starts
+            // with takebacks allowed, which is the old effective behaviour anyway - the
+            // former switch was never read by anything.
+            prefs.edit().remove(KEY_CONFIRM_TAKEBACK).apply()
+        }
         prefs.edit().putInt(KEY_SETTINGS_VERSION, SETTINGS_VERSION).apply()
     }
 
@@ -65,7 +73,7 @@ class ChessomniaPrefs(context: Context) {
         showHints = prefs.getBoolean(KEY_HINTS, true),
         showCoordinates = prefs.getBoolean(KEY_COORDS, true),
         boardBottomSide = if (prefs.getBoolean(KEY_BOTTOM_IS_WHITE, true)) Side.WHITE else Side.BLACK,
-        confirmTakeback = prefs.getBoolean(KEY_CONFIRM_TAKEBACK, true),
+        allowTakeback = prefs.getBoolean(KEY_ALLOW_TAKEBACK, true),
         keepScreenOn = prefs.getBoolean(KEY_KEEP_SCREEN_ON, true),
     )
 
@@ -75,7 +83,7 @@ class ChessomniaPrefs(context: Context) {
             .putBoolean(KEY_HINTS, s.showHints)
             .putBoolean(KEY_COORDS, s.showCoordinates)
             .putBoolean(KEY_BOTTOM_IS_WHITE, s.boardBottomSide == Side.WHITE)
-            .putBoolean(KEY_CONFIRM_TAKEBACK, s.confirmTakeback)
+            .putBoolean(KEY_ALLOW_TAKEBACK, s.allowTakeback)
             .putBoolean(KEY_KEEP_SCREEN_ON, s.keepScreenOn)
             .apply()
     }
@@ -100,12 +108,15 @@ class ChessomniaPrefs(context: Context) {
         const val KEY_HINTS = "show_hints"
         const val KEY_COORDS = "show_coordinates"
         const val KEY_BOTTOM_IS_WHITE = "board_bottom_is_white"
+        const val KEY_ALLOW_TAKEBACK = "allow_takeback"
+
+        /** Only still here for migration v4 (the cleanup). */
         const val KEY_CONFIRM_TAKEBACK = "confirm_takeback"
         const val KEY_KEEP_SCREEN_ON = "keep_screen_on"
         /** Only still here for migration v3 (the cleanup). */
         const val KEY_ORIENTATION = "screen_orientation"
         const val KEY_GAME = "current_game"
         const val KEY_SETTINGS_VERSION = "settings_version"
-        const val SETTINGS_VERSION = 3
+        const val SETTINGS_VERSION = 4
     }
 }

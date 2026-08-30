@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Offer a draw. In chess a drawn game is written as one half.
+  The pause curtain over the board. Deliberately a symbol and not a word:
+  it has no orientation, so it reads the same from both sides of the table.
   Own work, Apache-2.0. Drawn on a 24x24 grid with a 2dp stroke and round
   caps, so the whole set reads as one hand.
   No android:tint here: Compose's Icon() applies the colour via a filter,
@@ -12,21 +13,14 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
     <path
-        android:pathData="M17.5 5.5 L6.5 18.5"
+        android:pathData="M9 5 V19"
         android:fillColor="#00000000"
         android:strokeColor="#FF000000"
         android:strokeWidth="2"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
     <path
-        android:pathData="M4.2 6.2 L6 5 V11"
-        android:fillColor="#00000000"
-        android:strokeColor="#FF000000"
-        android:strokeWidth="2"
-        android:strokeLineCap="round"
-        android:strokeLineJoin="round" />
-    <path
-        android:pathData="M14 14.5 A2.6 2.6 0 0 1 19 15.5 C19 17.6 14 18.4 14 20.5 H19.2"
+        android:pathData="M15 5 V19"
         android:fillColor="#00000000"
         android:strokeColor="#FF000000"
         android:strokeWidth="2"

@@ -3,6 +3,7 @@ package name.lechners.chessomnia
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -48,6 +49,13 @@ class MainActivity : ComponentActivity() {
                         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                         onDispose { window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON) }
                     }
+                }
+
+                // Back leads one step up the screens instead of out of the app.
+                // Without this the app has exactly one back behaviour - quit - which is
+                // not what anyone expects from a settings or game screen.
+                BackHandler(enabled = screen != Screen.HOME) {
+                    screen = if (screen == Screen.LICENSES) Screen.SETTINGS else Screen.HOME
                 }
 
                 Surface(Modifier.fillMaxSize()) {

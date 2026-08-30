@@ -21,7 +21,7 @@ including the special moves — castling, en passant, promotion — that beginne
 | Deliberately absent | Move list / SAN notation, PGN export, any form of engine analysis |
 | Clock | **Counts upward, never expires.** Fully switchable |
 | Pieces | Classic Staunton as VectorDrawables |
-| Extras | Resign / agree a draw · the game survives an app restart · hints switchable · the screen stays on |
+| Extras | Start a new game from the board · the game survives an app restart · hints and takebacks switchable · the screen stays on |
 
 ### What the setup means for the layout
 
@@ -91,14 +91,19 @@ The app does **not** pin an orientation. From `targetSdk 36` Android ignores
 device — so a setting for it could only have looked broken.
 
 That costs nothing, because the layout was built for both orientations anyway: a `Column`
-over the full area, the board in a `Box(Modifier.weight(1f))` with
-`fillMaxHeight().aspectRatio(1f)`, panels above and below. In landscape the board simply
-gets smaller and the panels get wider.
+over the full area, the board in a weighted `BoxWithConstraints`, panels above and below.
+In landscape the board simply gets smaller and the panels get wider.
 
-⚠️ `ChessomniaPrefs.migrate()` has a `settings_version` chain. Step v3 removes the orphaned
-orientation key. **Every future change to a default needs the same treatment** — otherwise
-it only takes effect for fresh installs, since anyone who has touched the settings already
-has the old value stored.
+⚠️ **The board's side is `min(maxWidth, maxHeight)`, stated explicitly.** It used to be
+`fillMaxHeight().aspectRatio(1f)`, which derives the side from the height alone. On a
+tablet in landscape the height is the smaller axis, so that happened to be right; on a
+phone in portrait it is the larger one, and the board came out 608dp wide on a 344dp
+screen — about 57 % of it was visible. Do not go back to deriving it from one axis.
+
+⚠️ `ChessomniaPrefs.migrate()` has a `settings_version` chain: v3 removed the orphaned
+orientation key, v4 the orphaned takeback-confirmation key. **Every future change to a
+default needs the same treatment** — otherwise it only takes effect for fresh installs,
+since anyone who has touched the settings already has the old value stored.
 
 ---
 
@@ -198,12 +203,68 @@ otherwise no enemy piece could ever be taken.
 
 Switching to the main menu is **not** the end of a game. It lives on in `GameViewModel`
 and is additionally persisted; the menu offers **"Resume game"** and **"Start a new
-game"** separately, the latter with a confirmation while a game is running. There is
-deliberately **no** "new game" button on the game screen — even the game-over state only
-leads back to the menu. Ending and restarting should be explicit steps.
+game"** separately, the latter with a confirmation while a game is running.
+
+The game screen has a **new-game button** of its own, also behind a confirmation that
+names how many moves are about to be lost.
+
+⚠️ This reverses an earlier decision, which held that there should be no such button
+because "ending and restarting should be explicit steps". What changed is the reasoning
+around it: with resigning and offering a draw gone (see below), starting again is the
+*only* way to end a game, and routing that through the menu made the most ordinary
+action the most awkward one. It is still a deliberate step - it just no longer requires
+leaving the board first.
 
 The clock is **paused automatically** when the game screen is left (`DisposableEffect` in
 `GameScreen`), otherwise thinking time would accrue in the menu.
+
+### No resigning, no draw offers
+
+Both were removed. The app records nothing - no move list, no history, no rating - so how
+a game ends makes no difference to it; whoever wants to stop starts a new one.
+
+`GameStatus.Resigned` and `GameStatus.AgreedDraw` nevertheless remain in the rule model,
+together with their codes in `GameSnapshot`. A game saved by an older version can still
+carry them and has to load. `ChessGame.restoreResult()` is the only way in, and
+`ChessGameTest` covers exactly that path.
+
+### The pause curtain
+
+Pausing the clock with the button covers the board: the pieces disappear and a large
+pause symbol takes their place. Tapping it - or pressing back - resumes. The point is
+that the position cannot be studied while the clock is stopped.
+
+The symbol is deliberately a symbol and not a word: it has no orientation and therefore
+reads the same from both sides of the table. The word "Paused" is there too, but twice,
+once for each seat - the same reasoning that gives every panel a twin.
+
+⚠️ The curtain is tied to an **explicit** pause (`GameViewModel.pauseByUser`), not to the
+clock merely being stopped. The clock also stops after a takeback and when the screen is
+left, and covering the board then would be wrong: a takeback is followed by precisely the
+discussion in which both players want to look at the position.
+
+## Settings
+
+⚠️ A setting has to *do* something. "Confirm takeback" did not: it was written to the
+preferences and shown in the UI, but no code ever read it, so the confirmation appeared
+either way. It is now **"Allow taking moves back"**, which hides the undo button when
+switched off — a switch that offers or withholds the feature rather than one that only
+governs a prompt.
+
+The old value is deliberately **not** carried over by migration v4: switching a prompt off
+is not the same as giving up the feature, so translating one into the other would put
+words in the user's mouth. Everyone starts with takebacks allowed, which is the old
+effective behaviour anyway.
+
+## Back navigation
+
+`BackHandler` in two places, and the order matters. `GameScreen` claims back while
+something is on top of the board - the curtain, a confirmation, the promotion choice -
+and closes that first. `MainActivity` claims it for everything except the home screen and
+walks one step up: licences to settings, everything else to home.
+
+Without these the activity handles back itself and simply quits, which is what the app
+used to do from every screen.
 
 ---
 

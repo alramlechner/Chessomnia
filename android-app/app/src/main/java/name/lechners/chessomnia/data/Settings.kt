@@ -16,6 +16,15 @@ data class Settings(
      * so that nobody has to turn the tablet around.
      */
     val boardBottomSide: Side = Side.WHITE,
-    val confirmTakeback: Boolean = true,
+    /**
+     * Whether taking moves back is offered at all. When off, the undo button is not
+     * shown during a game.
+     *
+     * ⚠️ This replaced a "confirm takeback" switch that never did anything: nothing
+     * read it, so the confirmation appeared either way. A switch that offers or
+     * withholds the feature is both honest and more useful than one that only governs
+     * a prompt.
+     */
+    val allowTakeback: Boolean = true,
     val keepScreenOn: Boolean = true,
 )

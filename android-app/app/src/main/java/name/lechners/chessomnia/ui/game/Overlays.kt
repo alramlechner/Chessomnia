@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -104,12 +105,9 @@ fun ConfirmOverlay(
         is ConfirmAction.Takeback ->
             stringResource(R.string.confirm_takeback_title) to
                 stringResource(R.string.confirm_takeback_text)
-        is ConfirmAction.Resign ->
-            stringResource(R.string.confirm_resign_title) to
-                stringResource(R.string.confirm_resign_text, stringResource(sideNameRes(action.initiator)))
-        is ConfirmAction.Draw ->
-            stringResource(R.string.confirm_draw_title) to
-                stringResource(R.string.confirm_draw_text)
+        is ConfirmAction.NewGame ->
+            stringResource(R.string.confirm_new_game_title) to
+                pluralStringResource(R.plurals.confirm_new_game_text, action.moveCount, action.moveCount)
     }
     // Facing whoever asked - every action knows which panel it came from.
     val rotate = isSeatedAtTop(action.initiator, bottomSide)

@@ -44,8 +44,8 @@
     <string name="settings_hints_desc">Figur antippen zeigt alle erlaubten Zielfelder.</string>
     <string name="settings_coords_title">Koordinaten anzeigen</string>
     <string name="settings_coords_desc">Linien a–h und Reihen 1–8 am Brettrand.</string>
-    <string name="settings_confirm_takeback_title">Zurücknehmen bestätigen</string>
-    <string name="settings_confirm_takeback_desc">Fragt nach, bevor ein Zug rückgängig gemacht wird.</string>
+    <string name="settings_allow_takeback_title">Züge zurücknehmen erlauben</string>
+    <string name="settings_allow_takeback_desc">Zeigt den Zurück-Knopf während der Partie. Vor dem Zurücknehmen wird immer nachgefragt.</string>
 
     <string name="settings_section_screen">Bildschirm</string>
     <string name="settings_keep_screen_on_title">Bildschirm anlassen</string>
@@ -58,6 +58,10 @@
     <string name="settings_about_desc">Chessomnia ersetzt das physische Schachbrett. Es gibt keinen Computergegner und keine Zugempfehlung.</string>
     <string name="settings_about_credits">Schachfiguren: Colin M. L. Burnett (\"Cburnett\"), Wikimedia Commons. Schriftzug gesetzt aus Montserrat.</string>
     <string name="settings_about_licenses">Lizenzen anzeigen</string>
+
+    <!-- Pause-Vorhang über dem Brett -->
+    <string name="paused">Pausiert</string>
+    <string name="paused_tap_to_resume">Zum Fortsetzen tippen</string>
 
     <!-- Lizenzen -->
     <string name="licenses_title">Lizenzen</string>
@@ -90,9 +94,8 @@
     <string name="action_menu">Hauptmenü</string>
     <string name="action_pause">Uhr anhalten</string>
     <string name="action_start_clock">Uhr starten</string>
-    <string name="action_draw">Remis anbieten</string>
-    <string name="action_resign">Aufgeben</string>
     <string name="action_swap_colours">Brett drehen</string>
+    <string name="action_new_game">Neue Partie starten</string>
 
     <!-- Umwandlung -->
     <string name="promotion_title">Umwandeln in</string>
@@ -106,10 +109,11 @@
     <!-- Rückfragen -->
     <string name="confirm_takeback_title">Zug zurücknehmen?</string>
     <string name="confirm_takeback_text">Der letzte Zug wird rückgängig gemacht.</string>
-    <string name="confirm_resign_title">Aufgeben?</string>
-    <string name="confirm_resign_text">%s gibt die Partie auf.</string>
-    <string name="confirm_draw_title">Remis vereinbaren?</string>
-    <string name="confirm_draw_text">Die Partie endet unentschieden.</string>
+    <string name="confirm_new_game_title">Neue Partie starten?</string>
+    <plurals name="confirm_new_game_text">
+        <item quantity="one">Die laufende Partie mit %d Zug geht dabei verloren.</item>
+        <item quantity="other">Die laufende Partie mit %d Zügen geht dabei verloren.</item>
+    </plurals>
 
     <!-- 50-Züge-Anzeige -->
     <plurals name="fifty_move_remaining">

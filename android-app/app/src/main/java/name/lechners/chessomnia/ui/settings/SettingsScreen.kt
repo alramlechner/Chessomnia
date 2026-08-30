@@ -62,10 +62,10 @@ fun SettingsScreen(
             ) { on -> onChange { it.copy(showCoordinates = on) } }
 
             SwitchRow(
-                R.string.settings_confirm_takeback_title,
-                R.string.settings_confirm_takeback_desc,
-                settings.confirmTakeback,
-            ) { on -> onChange { it.copy(confirmTakeback = on) } }
+                R.string.settings_allow_takeback_title,
+                R.string.settings_allow_takeback_desc,
+                settings.allowTakeback,
+            ) { on -> onChange { it.copy(allowTakeback = on) } }
         }
 
         Section(R.string.settings_section_screen) {

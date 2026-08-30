@@ -64,14 +64,21 @@ class ChessGameTest {
         assertTrue(g.movesFrom(Square.parse("d8")).isNotEmpty())
     }
 
+    /**
+     * Resigning and agreeing a draw were dropped from the app: nothing is recorded, so
+     * how a game ends makes no difference. But a game SAVED by an older version can
+     * still carry those outcomes, and it has to keep working after being restored -
+     * including the takeback that reopens it.
+     */
     @Test
-    fun resignCanBeUndoneByTakeback() {
+    fun aRestoredResignationStillBehavesLikeAFinishedGame() {
         val g = game(clockEnabled = false)
         g.play("e2e4")
-        g.resign(Side.WHITE)
-        assertEquals(GameStatus.Resigned(Side.BLACK), g.status)
+        g.restoreResult(GameStatus.Resigned(Side.BLACK))
+
+        assertTrue("a restored resignation must count as over", g.status.isOver)
         g.takeback()
-        assertEquals(GameStatus.Ongoing, g.status)
+        assertEquals("a takeback must reopen it", GameStatus.Ongoing, g.status)
     }
 
     @Test

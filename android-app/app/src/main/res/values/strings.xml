@@ -49,8 +49,8 @@
     <string name="settings_hints_desc">Tapping a piece marks every square it may move to.</string>
     <string name="settings_coords_title">Show coordinates</string>
     <string name="settings_coords_desc">Files a–h and ranks 1–8 along the edge of the board.</string>
-    <string name="settings_confirm_takeback_title">Confirm takeback</string>
-    <string name="settings_confirm_takeback_desc">Asks before a move is undone.</string>
+    <string name="settings_allow_takeback_title">Allow taking moves back</string>
+    <string name="settings_allow_takeback_desc">Shows the undo button during a game. Taking a move back always asks first.</string>
 
     <string name="settings_section_screen">Display</string>
     <string name="settings_keep_screen_on_title">Keep the screen on</string>
@@ -63,6 +63,10 @@
     <string name="settings_about_desc">Chessomnia replaces the physical chess board. There is no computer opponent and no move suggestion.</string>
     <string name="settings_about_credits">Chess pieces: Colin M. L. Burnett (\"Cburnett\"), Wikimedia Commons. Wordmark set in Montserrat.</string>
     <string name="settings_about_licenses">Show licenses</string>
+
+    <!-- Pause curtain over the board -->
+    <string name="paused">Paused</string>
+    <string name="paused_tap_to_resume">Tap to continue</string>
 
     <!-- Licenses -->
     <string name="licenses_title">Licenses</string>
@@ -95,9 +99,8 @@
     <string name="action_menu">Main menu</string>
     <string name="action_pause">Pause the clock</string>
     <string name="action_start_clock">Start the clock</string>
-    <string name="action_draw">Offer a draw</string>
-    <string name="action_resign">Resign</string>
     <string name="action_swap_colours">Turn the board</string>
+    <string name="action_new_game">Start a new game</string>
 
     <!-- Promotion -->
     <string name="promotion_title">Promote to</string>
@@ -111,10 +114,11 @@
     <!-- Confirmations -->
     <string name="confirm_takeback_title">Undo the move?</string>
     <string name="confirm_takeback_text">The last move will be taken back.</string>
-    <string name="confirm_resign_title">Resign?</string>
-    <string name="confirm_resign_text">%s resigns the game.</string>
-    <string name="confirm_draw_title">Agree to a draw?</string>
-    <string name="confirm_draw_text">The game ends in a draw.</string>
+    <string name="confirm_new_game_title">Start a new game?</string>
+    <plurals name="confirm_new_game_text">
+        <item quantity="one">The current game with %d move will be lost.</item>
+        <item quantity="other">The current game with %d moves will be lost.</item>
+    </plurals>
 
     <!-- Fifty-move indicator -->
     <plurals name="fifty_move_remaining">

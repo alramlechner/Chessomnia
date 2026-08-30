@@ -41,8 +41,13 @@ import name.lechners.chessomnia.ui.theme.LogoBlue
  *
  * ⚠️ No tooltips and no overflow menu here. Both are popups, and a popup would be drawn
  * unrotated over a panel that is rotated 180 degrees for the player at the top. What
- * carries the meaning instead is the confirmation dialog: resign, draw and takeback all
- * spell out what is about to happen, and they do rotate correctly.
+ * carries the meaning instead is the confirmation dialog: taking a move back and
+ * starting a new game both spell out what is about to happen, and they do rotate
+ * correctly.
+ *
+ * There is deliberately no "resign" and no "offer a draw". Nothing is recorded anywhere,
+ * so how a game ends makes no difference to the app; whoever wants to stop starts a new
+ * one, which is what the new-game button is for.
  */
 @Composable
 fun PlayerPanel(
@@ -52,10 +57,10 @@ fun PlayerPanel(
     clockEnabled: Boolean,
     clockRunning: Boolean,
     onToggleClock: () -> Unit,
+    allowTakeback: Boolean,
     onTakeback: () -> Unit,
-    onResign: () -> Unit,
-    onDraw: () -> Unit,
     onSwapSides: () -> Unit,
+    onNewGame: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -108,8 +113,8 @@ fun PlayerPanel(
                 }
 
                 if (!compact) {
-                    Actions(over, state.canTakeback, clockEnabled, clockRunning,
-                        onToggleClock, onTakeback, onDraw, onResign, onSwapSides, onExit)
+                    Actions(over, state.canTakeback && allowTakeback, clockEnabled,
+                        clockRunning, onToggleClock, onTakeback, onSwapSides, onNewGame, onExit)
                 }
             }
 
@@ -119,8 +124,8 @@ fun PlayerPanel(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Actions(over, state.canTakeback, clockEnabled, clockRunning,
-                        onToggleClock, onTakeback, onDraw, onResign, onSwapSides, onExit)
+                    Actions(over, state.canTakeback && allowTakeback, clockEnabled,
+                        clockRunning, onToggleClock, onTakeback, onSwapSides, onNewGame, onExit)
                 }
             }
         }
@@ -131,9 +136,9 @@ fun PlayerPanel(
  * Below this width the actions get a line of their own.
  *
  * Derived, not guessed: clock (~58dp) + a status line that stays readable (~120dp) +
- * six 48dp icon buttons = 466dp.
+ * five 48dp icon buttons = 418dp.
  */
-private val COMPACT_BELOW = 480.dp
+private val COMPACT_BELOW = 430.dp
 
 @Composable
 private fun Actions(
@@ -143,15 +148,15 @@ private fun Actions(
     clockRunning: Boolean,
     onToggleClock: () -> Unit,
     onTakeback: () -> Unit,
-    onDraw: () -> Unit,
-    onResign: () -> Unit,
     onSwapSides: () -> Unit,
+    onNewGame: () -> Unit,
     onExit: () -> Unit,
 ) {
     if (over) {
-        // Once the game is over only the ways back remain - which is also how an
-        // accidental resignation gets corrected.
+        // Once the game is over only the ways onward remain: undo a mistake, start
+        // again, or leave.
         if (canTakeback) ActionButton(R.drawable.ic_takeback, R.string.action_takeback, onTakeback)
+        ActionButton(R.drawable.ic_new_game, R.string.action_new_game, onNewGame)
         ActionButton(R.drawable.ic_main_menu, R.string.action_menu, onExit)
         return
     }
@@ -163,9 +168,8 @@ private fun Actions(
         )
     }
     if (canTakeback) ActionButton(R.drawable.ic_takeback, R.string.action_takeback, onTakeback)
-    ActionButton(R.drawable.ic_draw_offer, R.string.action_draw, onDraw)
-    ActionButton(R.drawable.ic_resign, R.string.action_resign, onResign)
     ActionButton(R.drawable.ic_flip_board, R.string.action_swap_colours, onSwapSides)
+    ActionButton(R.drawable.ic_new_game, R.string.action_new_game, onNewGame)
     ActionButton(R.drawable.ic_main_menu, R.string.action_menu, onExit)
 }
 

@@ -1,14 +1,22 @@
 package name.lechners.chessomnia.ui.game
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import name.lechners.chessomnia.R
 import name.lechners.chessomnia.rules.GameStatus
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.ui.board.ChessBoard
@@ -33,6 +41,7 @@ fun GameScreen(
 ) {
     val state by vm.ui.collectAsState()
     val clockRunning by vm.clock.collectAsState()
+    val curtain by vm.curtain.collectAsState()
     var confirm by remember { mutableStateOf<ConfirmAction?>(null) }
 
     // Thinking time runs while the board is visible. The menu does NOT end the game,
@@ -51,6 +60,18 @@ fun GameScreen(
     val capturedTop = if (top == Side.WHITE) state.capturedByWhite else state.capturedByBlack
     val advantage = materialValue(capturedBottom) - materialValue(capturedTop)
 
+    // The system back gesture closes whatever is on top first. Without this it would
+    // fall straight through to the activity and leave the app, which is exactly what it
+    // used to do.
+    BackHandler(enabled = curtain || confirm != null ||
+        state.selection is Selection.AwaitingPromotion) {
+        when {
+            confirm != null -> confirm = null
+            state.selection is Selection.AwaitingPromotion -> vm.cancelPromotion()
+            else -> vm.startOrResumeClock()
+        }
+    }
+
     Box(modifier.fillMaxSize()) {
         Column(
             Modifier.fillMaxSize().padding(8.dp),
@@ -62,11 +83,11 @@ fun GameScreen(
                 clockFlow = vm.clock,
                 clockEnabled = clockRunning.enabled,
                 clockRunning = clockRunning.runningFor != null,
-                onToggleClock = { if (clockRunning.runningFor != null) vm.pauseClock() else vm.startOrResumeClock() },
+                onToggleClock = { if (clockRunning.runningFor != null) vm.pauseByUser() else vm.startOrResumeClock() },
+                allowTakeback = state.allowTakeback,
                 onTakeback = { confirm = ConfirmAction.Takeback(top) },
-                onResign = { confirm = ConfirmAction.Resign(top) },
-                onDraw = { confirm = ConfirmAction.Draw(top) },
                 onSwapSides = vm::swapSides,
+                onNewGame = { confirm = ConfirmAction.NewGame(top, state.moveCount) },
                 onExit = onExit,
                 modifier = Modifier.rotate(180f),
             )
@@ -96,7 +117,15 @@ fun GameScreen(
                     showCoordinates = state.showCoordinates,
                     onSquareTap = vm::onSquareTap,
                     modifier = Modifier.size(min(maxWidth, maxHeight)),
+                    piecesHidden = curtain,
                 )
+
+                if (curtain) {
+                    PauseCurtain(
+                        onResume = vm::startOrResumeClock,
+                        modifier = Modifier.size(min(maxWidth, maxHeight)),
+                    )
+                }
             }
 
             CapturedRow(capturedBottom, advantage, state.halfmoveClock, rotated = false, Modifier.padding(bottom = 4.dp))
@@ -107,11 +136,11 @@ fun GameScreen(
                 clockFlow = vm.clock,
                 clockEnabled = clockRunning.enabled,
                 clockRunning = clockRunning.runningFor != null,
-                onToggleClock = { if (clockRunning.runningFor != null) vm.pauseClock() else vm.startOrResumeClock() },
+                onToggleClock = { if (clockRunning.runningFor != null) vm.pauseByUser() else vm.startOrResumeClock() },
+                allowTakeback = state.allowTakeback,
                 onTakeback = { confirm = ConfirmAction.Takeback(bottom) },
-                onResign = { confirm = ConfirmAction.Resign(bottom) },
-                onDraw = { confirm = ConfirmAction.Draw(bottom) },
                 onSwapSides = vm::swapSides,
+                onNewGame = { confirm = ConfirmAction.NewGame(bottom, state.moveCount) },
                 onExit = onExit,
             )
         }
@@ -135,8 +164,7 @@ fun GameScreen(
                 onConfirm = {
                     when (action) {
                         is ConfirmAction.Takeback -> vm.takeback()
-                        is ConfirmAction.Resign -> vm.resign(action.initiator)
-                        is ConfirmAction.Draw -> vm.agreeDraw()
+                        is ConfirmAction.NewGame -> vm.newGame()
                     }
                     confirm = null
                 },
@@ -154,6 +182,57 @@ sealed interface ConfirmAction {
     val initiator: Side
 
     data class Takeback(override val initiator: Side) : ConfirmAction
-    data class Resign(override val initiator: Side) : ConfirmAction
-    data class Draw(override val initiator: Side) : ConfirmAction
+
+    /** Carries the move count so the prompt can say what is about to be lost. */
+    data class NewGame(override val initiator: Side, val moveCount: Int) : ConfirmAction
+}
+
+/**
+ * Covers the board while the players are on a break. The pieces are gone, so the
+ * position cannot be studied while the clock is stopped.
+ *
+ * A symbol rather than a word in the middle: it has no orientation and therefore reads
+ * the same from both sides of the table. The word is there too, but twice - once for
+ * each seat - which is the same reasoning that gives every panel a twin.
+ */
+@Composable
+private fun PauseCurtain(
+    onResume: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier
+            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.94f))
+            .clickable(onClick = onResume),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            stringResource(R.string.paused),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.align(Alignment.TopCenter).padding(top = 18.dp).rotate(180f),
+        )
+
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                painter = painterResource(R.drawable.ic_paused),
+                contentDescription = stringResource(R.string.paused),
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(96.dp),
+            )
+            Spacer(Modifier.height(10.dp))
+            Text(
+                stringResource(R.string.paused_tap_to_resume),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+
+        Text(
+            stringResource(R.string.paused),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 18.dp),
+        )
+    }
 }
