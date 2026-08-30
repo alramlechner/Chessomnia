@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Default (English) strings. German lives in values-de/strings.xml.
+
+  Keep both files in the same order and with the same keys; a missing key falls
+  back to this file, which shows up as a stray English line in a German UI.
+-->
+<resources>
+    <!-- A brand name: deliberately the same in every language. -->
+    <string name="app_name" translatable="false">Chessomnia</string>
+
+    <!-- Empty placeholder: "no text" expressed as a resource id (see ResText). -->
+    <string name="empty" translatable="false"></string>
+
+    <!-- Shared -->
+    <string name="common_cancel">Cancel</string>
+    <string name="common_yes">Yes</string>
+    <string name="side_white">White</string>
+    <string name="side_black">Black</string>
+
+    <!-- Home -->
+    <string name="home_tagline">The chess board for two players</string>
+    <string name="home_resume">Resume game</string>
+    <plurals name="home_moves_played">
+        <item quantity="one">%d move played</item>
+        <item quantity="other">%d moves played</item>
+    </plurals>
+    <string name="home_new_game">Start a new game</string>
+    <string name="home_settings">Settings</string>
+    <string name="home_version">Version %s</string>
+    <string name="home_footer">No chess engine — just the board.</string>
+    <string name="home_confirm_new_title">Start a new game?</string>
+    <plurals name="home_confirm_new_text">
+        <item quantity="one">The current game with %d move will be lost.</item>
+        <item quantity="other">The current game with %d moves will be lost.</item>
+    </plurals>
+    <string name="home_confirm_new_confirm">Start over</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_back">‹ Menu</string>
+
+    <string name="settings_section_clock">Thinking time</string>
+    <string name="settings_clock_title">Count thinking time</string>
+    <string name="settings_clock_desc">Shows how long each player has thought across all of their moves. The clock never runs out and never ends the game.</string>
+
+    <string name="settings_section_hints">Learning aids</string>
+    <string name="settings_hints_title">Show legal moves</string>
+    <string name="settings_hints_desc">Tapping a piece marks every square it may move to.</string>
+    <string name="settings_coords_title">Show coordinates</string>
+    <string name="settings_coords_desc">Files a–h and ranks 1–8 along the edge of the board.</string>
+    <string name="settings_confirm_takeback_title">Confirm takeback</string>
+    <string name="settings_confirm_takeback_desc">Asks before a move is undone.</string>
+
+    <string name="settings_section_screen">Display</string>
+    <string name="settings_keep_screen_on_title">Keep the screen on</string>
+    <string name="settings_keep_screen_on_desc">The tablet will not switch off during a game.</string>
+
+    <string name="settings_section_bugreport">Report a problem</string>
+    <string name="settings_bugreport_desc">Sends the current game with all its moves as plain text to an app of your choice — enough to reproduce a disputed position exactly.</string>
+
+    <string name="settings_section_about">About</string>
+    <string name="settings_about_desc">Chessomnia replaces the physical chess board. There is no computer opponent and no move suggestion.</string>
+    <string name="settings_about_credits">Chess pieces: Colin M. L. Burnett (\"Cburnett\"), Wikimedia Commons. Wordmark set in Montserrat.</string>
+    <string name="settings_about_licenses">Show licenses</string>
+
+    <!-- Licenses -->
+    <string name="licenses_title">Licenses</string>
+    <string name="licenses_back">‹ Settings</string>
+
+    <!-- Player panel: outcome -->
+    <string name="outcome_won">Won</string>
+    <string name="outcome_lost">Lost</string>
+    <string name="outcome_draw">Draw</string>
+
+    <!-- Player panel: why the game ended -->
+    <string name="reason_checkmate">Checkmate — %s wins</string>
+    <string name="reason_resigned">Resignation — %s wins</string>
+    <string name="reason_stalemate">Stalemate — the player to move has no legal move</string>
+    <string name="reason_fifty_move">50 moves without a pawn move and without a capture</string>
+    <string name="reason_threefold">The same position for the third time</string>
+    <string name="reason_insufficient_material">Not enough material left to deliver mate</string>
+    <string name="reason_agreed_draw">Draw agreed</string>
+
+    <!-- Player panel: running status -->
+    <string name="status_check">Check! It is your turn</string>
+    <string name="status_your_turn">It is your turn</string>
+    <string name="status_opponent_turn">Your opponent is to move</string>
+
+    <!-- Player panel: buttons -->
+    <string name="action_takeback">Undo</string>
+    <string name="action_menu">Menu</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_start_clock">Start clock</string>
+    <string name="action_draw">Draw</string>
+    <string name="action_resign">Resign</string>
+    <string name="action_swap_colours">Colours</string>
+
+    <!-- Promotion -->
+    <string name="promotion_title">Promote to</string>
+    <string name="piece_queen">Queen</string>
+    <string name="piece_rook">Rook</string>
+    <string name="piece_bishop">Bishop</string>
+    <string name="piece_knight">Knight</string>
+    <string name="piece_pawn">Pawn</string>
+    <string name="piece_king">King</string>
+
+    <!-- Confirmations -->
+    <string name="confirm_takeback_title">Undo the move?</string>
+    <string name="confirm_takeback_text">The last move will be taken back.</string>
+    <string name="confirm_resign_title">Resign?</string>
+    <string name="confirm_resign_text">%s resigns the game.</string>
+    <string name="confirm_draw_title">Agree to a draw?</string>
+    <string name="confirm_draw_text">The game ends in a draw.</string>
+
+    <!-- Fifty-move indicator -->
+    <plurals name="fifty_move_remaining">
+        <item quantity="one">Fifty-move rule: %d move left</item>
+        <item quantity="other">Fifty-move rule: %d moves left</item>
+    </plurals>
+
+    <!-- Bug report -->
+    <string name="bugreport_button">Report a problem</string>
+    <string name="bugreport_title">Report a problem</string>
+    <string name="bugreport_prompt">What happened? The more precise, the better — for example \"Black was checkmated and the app did not notice\".</string>
+    <string name="bugreport_placeholder">Description</string>
+    <string name="bugreport_included">Included: every move of the current game, the current position together with all moves legal in it, the app version and the device model. No personal data.</string>
+    <string name="bugreport_share">Share</string>
+    <string name="bugreport_subject">Chessomnia bug report</string>
+    <string name="bugreport_chooser">Share bug report</string>
+</resources>

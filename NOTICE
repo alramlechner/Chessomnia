@@ -1,0 +1,33 @@
+Chessomnia
+Copyright 2026 Alram Lechner
+
+This product includes software developed as part of the Chessomnia project.
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+--------------------------------------------------------------------------
+Drittinhalte / Third-party content
+--------------------------------------------------------------------------
+
+Schachfiguren (app/src/main/res/drawable/piece_*.xml)
+    Staunton-Set von Colin M. L. Burnett ("Cburnett"), Wikimedia Commons.
+    Mehrfach lizenziert; Chessomnia waehlt BSD 3-Clause.
+    Volltext: licenses/BSD-3-Clause-cburnett.txt
+
+Schriftzug (app/src/main/res/drawable/logo_wordmark.xml,
+            branding/chessomnia-wordmark.svg)
+    Gesetzt aus Montserrat von Julieta Ulanovsky u.a.,
+    SIL Open Font License 1.1. Es werden ausschliesslich Umrisse
+    verwendet; die Schriftdatei selbst wird nicht mit ausgeliefert.
+    Volltext: licenses/OFL-1.1-Montserrat.txt
+
+Bibliotheken
+    AndroidX (Core, Activity, Navigation, Lifecycle), Jetpack Compose,
+    Kotlin, kotlinx.serialization und -- nur in der LAN-Ausgabe -- OkHttp
+    stehen unter der Apache License 2.0.
+    Volltext: licenses/Apache-2.0.txt
+
+Referenzkorpus (app/src/test/resources/reference_positions.txt)
+    Erzeugt mit python-chess (GPL-3.0-or-later). Der Korpus enthaelt reine
+    Schach-Faktenlage (Stellungen und legale Zuege), ist kein abgeleitetes
+    Werk des Bibliothekscodes und wird nicht mit der App ausgeliefert --
+    er liegt ausschliesslich im Testpfad.

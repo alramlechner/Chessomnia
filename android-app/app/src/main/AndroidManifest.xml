@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Bewusst KEINE Berechtigungen: die App spielt vollstaendig offline,
+         sammelt nichts und sendet nichts. -->
+
+    <!-- Tablet-App: Touchscreen ja, Telefonie nein -->
+    <uses-feature android:name="android.hardware.touchscreen" android:required="true" />
+
+    <application
+        android:name=".ChessomniaApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="false"
+        android:theme="@style/Theme.Chessomnia">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:resizeableActivity="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|density"
+            android:theme="@style/Theme.Chessomnia">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+</manifest>

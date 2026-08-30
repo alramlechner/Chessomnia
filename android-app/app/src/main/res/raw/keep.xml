@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Keeps the licence file in the release build. LicensesScreen.kt already references
+  R.raw.licenses, which on its own would be enough - this is the second safeguard, so
+  that a later UI rework cannot silently drop the attribution from the APK again
+  (which is exactly what happened up to v1.0.8).
+-->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@raw/licenses" />

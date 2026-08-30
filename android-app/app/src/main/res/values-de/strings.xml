@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Deutsche Übersetzung. Reihenfolge und Schlüssel identisch zu values/strings.xml —
+  ein fehlender Schlüssel fällt stillschweigend auf Englisch zurück und fällt dann
+  als englische Zeile mitten in der deutschen Oberfläche auf.
+-->
+<resources>
+    <!-- app_name wird nicht übersetzt -->
+
+    <!-- Gemeinsam -->
+    <string name="common_cancel">Abbrechen</string>
+    <string name="common_yes">Ja</string>
+    <string name="side_white">Weiß</string>
+    <string name="side_black">Schwarz</string>
+
+    <!-- Startbildschirm -->
+    <string name="home_tagline">Das Schachbrett für zwei Spieler</string>
+    <string name="home_resume">Partie fortsetzen</string>
+    <plurals name="home_moves_played">
+        <item quantity="one">%d Zug gespielt</item>
+        <item quantity="other">%d Züge gespielt</item>
+    </plurals>
+    <string name="home_new_game">Neue Partie starten</string>
+    <string name="home_settings">Einstellungen</string>
+    <string name="home_version">Version %s</string>
+    <string name="home_footer">Kein Schachcomputer — nur das Brett.</string>
+    <string name="home_confirm_new_title">Neue Partie starten?</string>
+    <plurals name="home_confirm_new_text">
+        <item quantity="one">Die laufende Partie mit %d Zug geht dabei verloren.</item>
+        <item quantity="other">Die laufende Partie mit %d Zügen geht dabei verloren.</item>
+    </plurals>
+    <string name="home_confirm_new_confirm">Neu starten</string>
+
+    <!-- Einstellungen -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_back">‹ Menü</string>
+
+    <string name="settings_section_clock">Bedenkzeit</string>
+    <string name="settings_clock_title">Bedenkzeit mitzählen</string>
+    <string name="settings_clock_desc">Zeigt je Spieler, wie lange er über alle Züge hinweg nachgedacht hat. Die Uhr läuft nie ab und beendet die Partie nie.</string>
+
+    <string name="settings_section_hints">Lernhilfen</string>
+    <string name="settings_hints_title">Legale Züge anzeigen</string>
+    <string name="settings_hints_desc">Figur antippen zeigt alle erlaubten Zielfelder.</string>
+    <string name="settings_coords_title">Koordinaten anzeigen</string>
+    <string name="settings_coords_desc">Linien a–h und Reihen 1–8 am Brettrand.</string>
+    <string name="settings_confirm_takeback_title">Zurücknehmen bestätigen</string>
+    <string name="settings_confirm_takeback_desc">Fragt nach, bevor ein Zug rückgängig gemacht wird.</string>
+
+    <string name="settings_section_screen">Bildschirm</string>
+    <string name="settings_keep_screen_on_title">Bildschirm anlassen</string>
+    <string name="settings_keep_screen_on_desc">Während einer Partie schaltet sich das Tablet nicht ab.</string>
+
+    <string name="settings_section_bugreport">Fehler melden</string>
+    <string name="settings_bugreport_desc">Sendet die laufende Partie mit allen Zügen als Text an eine App deiner Wahl — damit lässt sich eine strittige Stellung genau nachstellen.</string>
+
+    <string name="settings_section_about">Über</string>
+    <string name="settings_about_desc">Chessomnia ersetzt das physische Schachbrett. Es gibt keinen Computergegner und keine Zugempfehlung.</string>
+    <string name="settings_about_credits">Schachfiguren: Colin M. L. Burnett (\"Cburnett\"), Wikimedia Commons. Schriftzug gesetzt aus Montserrat.</string>
+    <string name="settings_about_licenses">Lizenzen anzeigen</string>
+
+    <!-- Lizenzen -->
+    <string name="licenses_title">Lizenzen</string>
+    <string name="licenses_back">‹ Einstellungen</string>
+
+    <!-- Bedienfeld: Ausgang -->
+    <string name="outcome_won">Gewonnen</string>
+    <string name="outcome_lost">Verloren</string>
+    <string name="outcome_draw">Remis</string>
+
+    <!-- Bedienfeld: warum die Partie zu Ende ist -->
+    <string name="reason_checkmate">Schachmatt — %s gewinnt</string>
+    <string name="reason_resigned">Aufgegeben — %s gewinnt</string>
+    <string name="reason_stalemate">Patt — der Spieler am Zug hat keinen legalen Zug</string>
+    <string name="reason_fifty_move">50 Züge ohne Bauernzug und ohne Schlag</string>
+    <string name="reason_threefold">Dieselbe Stellung zum dritten Mal</string>
+    <string name="reason_insufficient_material">Zum Mattsetzen reicht das Material nicht</string>
+    <string name="reason_agreed_draw">Remis vereinbart</string>
+
+    <!-- Bedienfeld: laufende Partie -->
+    <string name="status_check">Schach! Du bist am Zug</string>
+    <string name="status_your_turn">Du bist am Zug</string>
+    <string name="status_opponent_turn">Der Gegner ist am Zug</string>
+
+    <!-- Bedienfeld: Knöpfe -->
+    <string name="action_takeback">Zurück</string>
+    <string name="action_menu">Menü</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_start_clock">Uhr starten</string>
+    <string name="action_draw">Remis</string>
+    <string name="action_resign">Aufgeben</string>
+    <string name="action_swap_colours">Farben</string>
+
+    <!-- Umwandlung -->
+    <string name="promotion_title">Umwandeln in</string>
+    <string name="piece_queen">Dame</string>
+    <string name="piece_rook">Turm</string>
+    <string name="piece_bishop">Läufer</string>
+    <string name="piece_knight">Springer</string>
+    <string name="piece_pawn">Bauer</string>
+    <string name="piece_king">König</string>
+
+    <!-- Rückfragen -->
+    <string name="confirm_takeback_title">Zug zurücknehmen?</string>
+    <string name="confirm_takeback_text">Der letzte Zug wird rückgängig gemacht.</string>
+    <string name="confirm_resign_title">Aufgeben?</string>
+    <string name="confirm_resign_text">%s gibt die Partie auf.</string>
+    <string name="confirm_draw_title">Remis vereinbaren?</string>
+    <string name="confirm_draw_text">Die Partie endet unentschieden.</string>
+
+    <!-- 50-Züge-Anzeige -->
+    <plurals name="fifty_move_remaining">
+        <item quantity="one">50-Züge-Regel: noch %d Zug</item>
+        <item quantity="other">50-Züge-Regel: noch %d Züge</item>
+    </plurals>
+
+    <!-- Fehlerbericht -->
+    <string name="bugreport_button">Fehler melden</string>
+    <string name="bugreport_title">Fehler melden</string>
+    <string name="bugreport_prompt">Was ist passiert? Je genauer, desto besser — zum Beispiel \"Schwarz war matt, die App hat es nicht erkannt\".</string>
+    <string name="bugreport_placeholder">Beschreibung</string>
+    <string name="bugreport_included">Mitgesendet werden: alle Züge der laufenden Partie, die aktuelle Stellung samt allen dort möglichen Zügen, App-Version und Gerätemodell. Keine persönlichen Daten.</string>
+    <string name="bugreport_share">Teilen</string>
+    <string name="bugreport_subject">Chessomnia Fehlerbericht</string>
+    <string name="bugreport_chooser">Fehlerbericht teilen</string>
+</resources>
