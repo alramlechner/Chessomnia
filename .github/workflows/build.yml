@@ -1,0 +1,54 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android-app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Java 17 is required: newer JDKs crash the Kotlin compiler in this setup.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit tests
+        run: ./gradlew test
+
+      # The deep perft runs are the actual correctness proof of the rule engine:
+      # 12.4 million nodes against the six standard positions. They are hidden
+      # behind a flag locally because they are slower, but CI should always pay
+      # that price -- a move generator that drifts must never reach main.
+      - name: Deep perft
+        run: ./gradlew test -DperftDeep=1 --rerun-tasks
+
+      # checkReleaseBuilds is off in the build file so that lint stays out of the
+      # release path; that also suppresses the NewApi check, which is the one
+      # that would catch a call above minSdk. So run it explicitly here.
+      - name: Lint
+        run: ./gradlew lintRelease
+
+      # No signing config in CI, so this deliberately produces an unsigned APK.
+      # The point is that the release variant compiles and survives R8.
+      - name: Release build
+        run: ./gradlew assembleRelease
+
+      - name: Upload lint report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-report
+          path: android-app/app/build/reports/lint-results-release.html
+          if-no-files-found: ignore
