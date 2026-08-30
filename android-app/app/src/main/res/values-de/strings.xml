@@ -82,14 +82,17 @@
     <string name="status_your_turn">Du bist am Zug</string>
     <string name="status_opponent_turn">Der Gegner ist am Zug</string>
 
-    <!-- Bedienfeld: Knöpfe -->
-    <string name="action_takeback">Zurück</string>
-    <string name="action_menu">Menü</string>
-    <string name="action_pause">Pause</string>
+    <!-- Aktionen im Bedienfeld. Es sind Icon-Knöpfe, die Texte hier sind also
+         Bedienhilfe-Beschreibungen und keine sichtbaren Beschriftungen — sie
+         dürfen und sollen deutlicher sein. "Zug zurücknehmen" statt "Zurück",
+         weil "Zurück" neben einem Hauptmenü-Knopf als Navigation gelesen wird. -->
+    <string name="action_takeback">Zug zurücknehmen</string>
+    <string name="action_menu">Hauptmenü</string>
+    <string name="action_pause">Uhr anhalten</string>
     <string name="action_start_clock">Uhr starten</string>
-    <string name="action_draw">Remis</string>
+    <string name="action_draw">Remis anbieten</string>
     <string name="action_resign">Aufgeben</string>
-    <string name="action_swap_colours">Farben</string>
+    <string name="action_swap_colours">Brett drehen</string>
 
     <!-- Umwandlung -->
     <string name="promotion_title">Umwandeln in</string>

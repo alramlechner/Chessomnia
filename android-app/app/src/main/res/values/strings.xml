@@ -87,14 +87,17 @@
     <string name="status_your_turn">It is your turn</string>
     <string name="status_opponent_turn">Your opponent is to move</string>
 
-    <!-- Player panel: buttons -->
-    <string name="action_takeback">Undo</string>
-    <string name="action_menu">Menu</string>
-    <string name="action_pause">Pause</string>
-    <string name="action_start_clock">Start clock</string>
-    <string name="action_draw">Draw</string>
+    <!-- Player panel actions. These are icon buttons, so the strings below are
+         content descriptions rather than visible labels: they may and should be
+         more explicit than a label would be. "Take back move" instead of "Undo",
+         because next to a main-menu button "Undo" reads as "go back". -->
+    <string name="action_takeback">Take back move</string>
+    <string name="action_menu">Main menu</string>
+    <string name="action_pause">Pause the clock</string>
+    <string name="action_start_clock">Start the clock</string>
+    <string name="action_draw">Offer a draw</string>
     <string name="action_resign">Resign</string>
-    <string name="action_swap_colours">Colours</string>
+    <string name="action_swap_colours">Turn the board</string>
 
     <!-- Promotion -->
     <string name="promotion_title">Promote to</string>
