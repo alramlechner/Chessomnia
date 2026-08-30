@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import name.lechners.chessomnia.rules.GameStatus
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.ui.board.ChessBoard
@@ -72,10 +73,19 @@ fun GameScreen(
 
             CapturedRow(capturedTop, -advantage, state.halfmoveClock, rotated = true, Modifier.padding(top = 4.dp))
 
-            Box(
+            BoxWithConstraints(
                 Modifier.weight(1f).fillMaxWidth().padding(vertical = 4.dp),
                 contentAlignment = Alignment.Center,
             ) {
+                // The board is square, so its side is the SMALLER of the two axes.
+                //
+                // ⚠️ This used to be fillMaxHeight().aspectRatio(1f), which derives the
+                // side from the height alone. On a tablet in landscape the height is the
+                // smaller axis and that happened to be right; on a phone in portrait it
+                // is the larger one, and the board came out 608dp wide on a 344dp
+                // screen - about 57 % of it was visible. Deriving the side explicitly
+                // is correct in every orientation and does not depend on the order in
+                // which aspectRatio() falls back through the incoming constraints.
                 ChessBoard(
                     board = state.board,
                     bottomSide = bottom,
@@ -85,7 +95,7 @@ fun GameScreen(
                     checkedKing = state.checkedKingSquare,
                     showCoordinates = state.showCoordinates,
                     onSquareTap = vm::onSquareTap,
-                    modifier = Modifier.fillMaxHeight().aspectRatio(1f),
+                    modifier = Modifier.size(min(maxWidth, maxHeight)),
                 )
             }
 
