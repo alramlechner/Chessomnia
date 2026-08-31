@@ -36,6 +36,14 @@ fun HomeScreen(
             .padding(horizontal = 32.dp, vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        // Decorative: the wordmark right below carries the name, so announcing the
+        // mark as well would just repeat it.
+        Image(
+            painter = painterResource(R.drawable.logo_mark),
+            contentDescription = null,
+            modifier = Modifier.height(76.dp),
+        )
+        Spacer(Modifier.height(20.dp))
         Image(
             painter = painterResource(R.drawable.logo_wordmark),
             contentDescription = stringResource(R.string.app_name),

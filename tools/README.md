@@ -30,6 +30,42 @@ no longer twelve points, the script aborts rather than silently drawing somethin
 
 ---
 
+## `generate_app_icon.py` — the app icon and the in-app mark
+
+Generates three drawables from one description of the artwork — a **queen beside a king**:
+
+```bash
+python3 tools/generate_app_icon.py
+```
+
+| Output | Purpose |
+|---|---|
+| `res/drawable/ic_launcher_foreground.xml` | adaptive icon, foreground layer |
+| `res/drawable/ic_launcher_monochrome.xml` | themed icon (Android 13+), single colour |
+| `res/drawable/logo_mark.xml` | the same artwork cropped, shown on the home screen |
+
+No dependencies. Both outlines are hand-placed coordinates in the script — original work,
+**not** derived from the Cburnett board set that `svg_to_vectordrawable.py` handles.
+
+The placement is computed, not eyeballed: the group is fitted so its corners land on the
+72 dp circle that every launcher mask reveals, and the transforms are baked into the path
+data so no `<group>` scaling is left for a converter to drop.
+
+⚠️ **Queen and king must keep their gap.** Overlapping them looks richer in colour, but the
+themed icon flattens both to one colour and fused silhouettes become an unreadable blob.
+If you change `PLACE_QUEEN` or `PLACE_KING`, check the monochrome output, not just the
+colour one.
+
+After changing the icon, regenerate the store artwork as well — it is derived from the
+launcher foreground:
+
+```bash
+python3 tools/render_store_assets.py
+rsvg-convert store/play-icon-512.svg -w 512 -h 512 -o store/play-icon-512.png
+```
+
+---
+
 ## `svg_to_vectordrawable.py` — the chess pieces
 
 Converts the original Cburnett SVGs into

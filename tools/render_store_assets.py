@@ -164,9 +164,9 @@ def main():
     OUT.mkdir(exist_ok=True)
 
     # ── App icon ────────────────────────────────────────────────────────────
-    # The launcher foreground draws on a 108 grid but scales itself into the
-    # inner ~66 % via a <group>; reusing it here keeps store icon and launcher
-    # icon identical rather than merely similar.
+    # The launcher foreground draws on a 108 grid with the placement already
+    # baked into its path data (see tools/generate_app_icon.py); reusing it here
+    # keeps store icon and launcher icon identical rather than merely similar.
     icon_group = vector_to_svg_group(RES / "ic_launcher_foreground.xml", scale=512)
     (OUT / "play-icon-512.svg").write_text(
         f'<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" '
