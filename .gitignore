@@ -11,6 +11,8 @@ keystore.properties
 *.jks
 *.keystore
 *.p12
+# Play Console service account key -- publishes releases in your name
+play-service-account.json
 
 # IDE
 .idea/

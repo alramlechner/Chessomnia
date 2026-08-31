@@ -278,8 +278,13 @@ class GameViewModel(
             description,
             BugReportData(
                 app = appInfo,
-                timestamp = java.time.LocalDateTime.now()
-                    .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                // Locale.ROOT so the timestamp stays ASCII: DateTimeFormatter takes
+                // its DecimalStyle from the locale, and the bug report is meant to be
+                // machine-comparable.
+                timestamp = java.time.LocalDateTime.now().format(
+                    java.time.format.DateTimeFormatter
+                        .ofPattern("yyyy-MM-dd HH:mm:ss", java.util.Locale.ROOT),
+                ),
                 startFen = game.startFen,
                 moves = game.moveList(),
                 currentFen = game.fen(),

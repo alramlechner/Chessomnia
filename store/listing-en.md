@@ -26,7 +26,7 @@ FREE, AD-FREE, TRACKING-FREE
 
 No advertising. No analytics. No account. No in-app purchases. Nothing to unlock.
 
-The app requests no Android permissions at all — not even internet access — so it is technically incapable of sending anything anywhere. Your games never leave your device. You can verify that yourself: Chessomnia is open source.
+The app holds no Android permission that grants it anything — not even internet access — so it is technically incapable of sending anything anywhere. Your games never leave your device. You can verify that yourself: Chessomnia is open source.
 
 
 WORKS COMPLETELY OFFLINE
@@ -101,9 +101,12 @@ https://github.com/alramlechner/Chessomnia
 | Is all of the user data collected by your app encrypted in transit? | n/a — nothing is transmitted |
 | Do you provide a way for users to request that their data is deleted? | n/a — nothing is collected |
 
-Supporting evidence, should a reviewer ask: the release manifest declares no
-permissions at all, and the app contains no analytics, advertising or
-crash-reporting SDK.
+Supporting evidence, should a reviewer ask: the release manifest requests no
+permission that grants the app any capability — the single `uses-permission`
+line is `…DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`, a signature-level
+permission AndroidX declares for the app about itself, so that it can register
+a receiver as not-exported. There is no `INTERNET` permission, and the app
+contains no analytics, advertising or crash-reporting SDK.
 
 ## Privacy policy URL
 

@@ -3,6 +3,7 @@ package name.lechners.chessomnia.data
 import name.lechners.chessomnia.rules.Piece
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.rules.Square
+import java.util.Locale
 
 /** What belongs in the report about the app and the device. */
 data class AppInfo(
@@ -125,6 +126,11 @@ object BugReport {
 
     private fun formatMs(ms: Long): String {
         val total = ms.coerceAtLeast(0L) / 1000
-        return "%d:%02d:%02d".format(total / 3600, (total % 3600) / 60, total % 60)
+        // Locale.ROOT, not the device default: %d takes its digits from the
+        // formatting locale, so on a device using e.g. Arabic-Indic numerals the
+        // report would arrive with digits this file promises it will not contain.
+        return String.format(
+            Locale.ROOT, "%d:%02d:%02d", total / 3600, (total % 3600) / 60, total % 60,
+        )
     }
 }

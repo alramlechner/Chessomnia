@@ -37,7 +37,7 @@
 
     <string name="settings_section_clock">Bedenkzeit</string>
     <string name="settings_clock_title">Bedenkzeit mitzählen</string>
-    <string name="settings_clock_desc">Zeigt je Spieler, wie lange er über alle Züge hinweg nachgedacht hat. Die Uhr läuft nie ab und beendet die Partie nie.</string>
+    <string name="settings_clock_desc">Zeigt je Spieler, wie lange über alle Züge hinweg nachgedacht wurde. Die Uhr läuft nie ab und beendet die Partie nie.</string>
 
     <string name="settings_section_hints">Lernhilfen</string>
     <string name="settings_hints_title">Legale Züge anzeigen</string>
@@ -45,7 +45,7 @@
     <string name="settings_coords_title">Koordinaten anzeigen</string>
     <string name="settings_coords_desc">Linien a–h und Reihen 1–8 am Brettrand.</string>
     <string name="settings_allow_takeback_title">Züge zurücknehmen erlauben</string>
-    <string name="settings_allow_takeback_desc">Zeigt den Zurück-Knopf während der Partie. Vor dem Zurücknehmen wird immer nachgefragt.</string>
+    <string name="settings_allow_takeback_desc">Zeigt während der Partie den Knopf zum Zurücknehmen. Vor dem Zurücknehmen wird immer nachgefragt.</string>
 
     <string name="settings_section_screen">Bildschirm</string>
     <string name="settings_keep_screen_on_title">Bildschirm anlassen</string>
@@ -58,6 +58,8 @@
     <string name="settings_about_desc">Chessomnia ersetzt das physische Schachbrett. Es gibt keinen Computergegner und keine Zugempfehlung.</string>
     <string name="settings_about_credits">Schachfiguren: Colin M. L. Burnett (\"Cburnett\"), Wikimedia Commons. Schriftzug gesetzt aus Montserrat.</string>
     <string name="settings_about_licenses">Lizenzen anzeigen</string>
+    <string name="settings_about_source">Quelltext auf GitHub</string>
+    <string name="settings_about_no_browser">Keine App gefunden, die den Link öffnen kann.</string>
 
     <!-- Pause-Vorhang über dem Brett -->
     <string name="paused">Pausiert</string>

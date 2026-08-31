@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.play.publisher)
 }
 
 // The version lives in version.properties at the repository root, so that a
@@ -79,6 +80,28 @@ android {
         // catch a call above minSdk. Run lintRelease before publishing.
         checkReleaseBuilds = false
     }
+}
+
+// Publishing to Google Play. The service account key is untracked -- see
+// play-service-account.json.example. Without it every ordinary task still works;
+// only the publish* tasks fail, and they fail with a clear message rather than
+// silently doing nothing.
+//
+// ⚠️ The defaults here are deliberately harmless. `publishBundle` with no further
+// arguments goes to the INTERNAL track, which is a named list of at most 100
+// testers -- not the store. Shipping to the public is an explicit act:
+//
+//     ./gradlew publishBundle --track production
+//
+// ⚠️ The API cannot create the very first release of an app. Google requires one
+// bundle to be uploaded through the Play Console by hand before the Developer API
+// will accept anything for that package.
+play {
+    val credentials = rootProject.file("play-service-account.json")
+    if (credentials.isFile) serviceAccountCredentials.set(credentials)
+    defaultToAppBundles.set(true)
+    track.set("internal")
+    releaseStatus.set(com.github.triplet.gradle.androidpublisher.ReleaseStatus.COMPLETED)
 }
 
 dependencies {

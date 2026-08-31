@@ -120,6 +120,10 @@ unsigned, which is what a fork or a CI check wants.
 ./gradlew bundleRelease        # Android App Bundle
 ```
 
+Cutting an actual release — versioning, the checks that catch a build which
+succeeds but is wrong, and the Play Console steps — is written up in
+[RELEASING.md](RELEASING.md).
+
 | | |
 |---|---|
 | Language / UI | Kotlin 2.2, Jetpack Compose, Material 3 |

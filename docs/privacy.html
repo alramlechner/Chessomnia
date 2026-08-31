@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Chessomnia</title>
+<meta name="description" content="Chessomnia collects no data at all. Full privacy policy.">
+<meta name="color-scheme" content="dark">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;padding:0 20px;background:#161A22;color:#E8ECF2;
+       font:16px/1.65 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:56px 0 80px}
+  h1{font-size:1.9rem;line-height:1.2;margin:0 0 .2em}
+  h2{font-size:1.15rem;margin:2.2em 0 .5em;color:#3193C6}
+  a{color:#3193C6}
+  code{background:#2B303E;padding:.15em .4em;border-radius:4px;font-size:.9em;
+        overflow-wrap:anywhere}
+  ul{padding-left:1.2em}
+  .lede{color:#9AA5B8}
+  .mark{display:block;width:96px;margin:0 0 24px}
+  footer{margin-top:56px;padding-top:20px;border-top:1px solid #3C4456;
+          color:#9AA5B8;font-size:.9rem}
+</style>
+</head>
+<body><div class="wrap">
+<img class="mark" src="icon.png" alt="">
+<h1>Privacy Policy</h1>
+<p><strong>Chessomnia does not collect, store or transmit any personal data.</strong></p>
+<p>Last updated: 31 August 2026</p>
+<h2>What the app collects</h2>
+<p>Nothing.</p>
+<p>There is no account, no registration, no analytics, no advertising, no crash reporting and no tracking of any kind. The app contains no advertising SDK, no analytics SDK and no Google Play Services.</p>
+<h2>What the app stores</h2>
+<p>Two things, both in the app&#x27;s own private storage on your device:</p>
+<ul>
+<li>your settings (clock on/off, learning aids, screen behaviour), and</li>
+<li>the game currently in progress, so it survives an app restart.</li>
+</ul>
+<p>Both are removed when you uninstall the app. Neither leaves the device.</p>
+<p>If you have Android&#x27;s own backup enabled, these settings may be included in your personal device backup — that is a function of your Android account, not of Chessomnia, and the data never reaches the developer.</p>
+<h2>Network access</h2>
+<p>The app holds <strong>no Android permission that grants it any capability</strong> — in particular no <code>INTERNET</code> permission. It is therefore technically incapable of sending anything anywhere.</p>
+<p>To be exact rather than merely reassuring: the manifest contains one <code>uses-permission</code> entry, <code>name.lechners.chessomnia.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION</code>. It is declared by the AndroidX libraries for the app about itself, so that the app can register an internal receiver as not-exported. It grants access to nothing and is not visible to you as a permission request. You can verify all of this in the manifest, which is part of the published source code.</p>
+<p>The <em>Source code on GitHub</em> button in Settings hands a web address to your browser. From that point your browser is talking to GitHub, under GitHub&#x27;s privacy policy, exactly as if you had typed the address yourself. Chessomnia makes no request of its own and learns nothing about the visit.</p>
+<h2>Bug reports</h2>
+<p>The <em>Report a problem</em> button assembles a plain-text description of the current game: the position, the moves played, the moves legal in that position, the app version and the device model (for example &quot;Samsung SM-X200, Android 15&quot;). It contains no personal data.</p>
+<p>The report is handed to Android&#x27;s standard share sheet. <strong>You</strong> choose where it goes — an email app, a messenger, a notes app, or nowhere. The app itself sends nothing and has no means of doing so. You see the full text before you share it.</p>
+<h2>Children</h2>
+<p>The app is suitable for all ages. Because it collects no data whatsoever, it collects no data from children either.</p>
+<h2>Changes</h2>
+<p>Any change to this policy will be published in this file in the project&#x27;s public repository, together with the date above.</p>
+<h2>Contact</h2>
+<p>Questions about this policy: open an issue at <a href="https://github.com/alramlechner/Chessomnia/issues">https://github.com/alramlechner/Chessomnia/issues</a>.</p>
+<footer>Chessomnia is free software under the Apache License 2.0 &middot;
+<a href="https://github.com/alramlechner/Chessomnia">Source code on GitHub</a></footer>
+</div></body>
+</html>

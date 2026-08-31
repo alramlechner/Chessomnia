@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.StateFlow
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.ui.theme.LogoBlue
+import java.util.Locale
 
 /**
  * The clock display collects the tick flow ITSELF - deliberately as deep in the tree as
@@ -61,6 +62,9 @@ internal fun formatTime(ms: Long): String {
     val hours = total / 3600
     val minutes = (total % 3600) / 60
     val seconds = total % 60
-    return if (hours > 0) "%d:%02d:%02d".format(hours, minutes, seconds)
-    else "%d:%02d".format(minutes, seconds)
+    // Locale.ROOT: the clock must show Latin digits even when the device's
+    // formatting locale uses another numbering system, because the surrounding
+    // UI has already fallen back to English in that case.
+    return if (hours > 0) String.format(Locale.ROOT, "%d:%02d:%02d", hours, minutes, seconds)
+    else String.format(Locale.ROOT, "%d:%02d", minutes, seconds)
 }

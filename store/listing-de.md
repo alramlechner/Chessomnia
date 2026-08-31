@@ -24,7 +24,7 @@ KOSTENLOS, WERBEFREI, OHNE TRACKING
 
 Keine Werbung. Keine Analyse. Kein Konto. Keine In-App-Käufe. Nichts zum Freischalten.
 
-Die App fordert überhaupt keine Android-Berechtigungen an — nicht einmal Internetzugriff. Sie kann technisch gar nichts irgendwohin senden. Deine Partien verlassen das Gerät nie. Nachprüfbar: Chessomnia ist quelloffen.
+Die App hält keine Android-Berechtigung, die ihr irgendetwas erlaubt — nicht einmal Internetzugriff. Sie kann technisch gar nichts irgendwohin senden. Deine Partien verlassen das Gerät nie. Nachprüfbar: Chessomnia ist quelloffen.
 
 
 FUNKTIONIERT VOLLSTÄNDIG OFFLINE

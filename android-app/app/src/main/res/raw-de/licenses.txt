@@ -1,0 +1,103 @@
+Chessomnia
+==========
+
+Chessomnia steht unter der Apache License 2.0.
+Copyright 2026 Alram Lechner
+
+Diese Seite listet jedes fremde Werk auf, das in der App enthalten ist.
+
+Die Lizenztexte selbst stehen bewusst im englischen Original: sie sind der
+rechtlich verbindliche Wortlaut, eine Übersetzung wäre es nicht.
+
+
+Schachfiguren
+-------------
+Staunton-Figurensatz von Colin M. L. Burnett ("Cburnett"), Wikimedia Commons.
+https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
+
+Der Autor bietet den Satz mehrfachlizenziert an (GFDL 1.2+, CC BY-SA 3.0,
+BSD 3-Clause, GPL 2+), mit dem ausdrücklichen Hinweis "You may select the
+license of your choice". Chessomnia wählt die BSD-3-Clause-Lizenz.
+
+Die Dateien res/drawable/piece_*.xml sind Bearbeitungen der Original-SVGs: sie
+wurden von tools/svg_to_vectordrawable.py in Android-VectorDrawables
+umgewandelt. Die Umrisse selbst sind unverändert.
+
+  Copyright (c) Colin M. L. Burnett
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+  3. Neither the name of the copyright holder nor the names of its
+     contributors may be used to endorse or promote products derived from
+     this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  POSSIBILITY OF SUCH DAMAGE.
+
+
+Schriftzug
+----------
+Der Schriftzug "CHESSOMNIA" (res/drawable/logo_wordmark.xml) ist in der Schrift
+Montserrat gesetzt -- Julieta Ulanovsky und Mitwirkende, lizenziert unter der
+SIL Open Font License 1.1.
+https://github.com/JulietaUla/Montserrat
+
+Erzeugt von tools/generate_wordmark.py. In die App gehen nur die Buchstaben-
+Umrisse ein; die Schriftdatei selbst wird nicht weitergegeben. Das E ist
+absichtlich ohne senkrechten Stamm gesetzt.
+
+Nach OFL 1.1 unterliegen Dokumente, die mit einer Schrift erstellt wurden,
+nicht selbst der OFL.
+
+
+App-Symbol
+----------
+Die Silhouetten von König und Dame im App-Symbol und im Zeichen auf dem
+Startbildschirm (res/drawable/ic_launcher_*.xml, res/drawable/logo_mark.xml)
+sind eigene Arbeit, erzeugt von tools/generate_app_icon.py, und stehen unter
+der Apache License 2.0. Sie sind nicht vom oben genannten Cburnett-Satz
+abgeleitet.
+
+
+Verwendete Bibliotheken
+-----------------------
+Alle folgenden stehen unter der Apache License 2.0:
+
+  AndroidX Core KTX                 androidx.core:core-ktx
+  Jetpack Compose (UI, Graphics,    androidx.compose.*
+      Material 3, Tooling)
+  AndroidX Activity Compose         androidx.activity:activity-compose
+  AndroidX Navigation Compose       androidx.navigation:navigation-compose
+  AndroidX Lifecycle ViewModel      androidx.lifecycle:lifecycle-viewmodel-compose
+  Kotlin Standard Library           org.jetbrains.kotlin:kotlin-stdlib
+  kotlinx.serialization             org.jetbrains.kotlinx:kotlinx-serialization-json
+
+  Copyright (c) The Android Open Source Project
+  Copyright (c) JetBrains s.r.o. and contributors
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.

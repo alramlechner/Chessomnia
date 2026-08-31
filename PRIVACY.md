@@ -2,7 +2,7 @@
 
 **Chessomnia does not collect, store or transmit any personal data.**
 
-Last updated: 30 August 2026
+Last updated: 31 August 2026
 
 ## What the app collects
 
@@ -27,9 +27,20 @@ never reaches the developer.
 
 ## Network access
 
-The app requests **no Android permissions at all**, including no `INTERNET` permission. It
-is therefore technically incapable of sending anything anywhere. You can verify this in the
-app's manifest, which is part of the published source code.
+The app holds **no Android permission that grants it any capability** — in particular no
+`INTERNET` permission. It is therefore technically incapable of sending anything anywhere.
+
+To be exact rather than merely reassuring: the manifest contains one `uses-permission`
+entry, `name.lechners.chessomnia.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`. It is declared
+by the AndroidX libraries for the app about itself, so that the app can register an
+internal receiver as not-exported. It grants access to nothing and is not visible to you as
+a permission request. You can verify all of this in the manifest, which is part of the
+published source code.
+
+The *Source code on GitHub* button in Settings hands a web address to your browser. From
+that point your browser is talking to GitHub, under GitHub's privacy policy, exactly as if
+you had typed the address yourself. Chessomnia makes no request of its own and learns
+nothing about the visit.
 
 ## Bug reports
 

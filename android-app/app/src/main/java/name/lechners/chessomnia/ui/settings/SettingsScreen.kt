@@ -1,5 +1,8 @@
 package name.lechners.chessomnia.ui.settings
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,8 +11,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import name.lechners.chessomnia.R
 import name.lechners.chessomnia.data.Settings
 import name.lechners.chessomnia.ui.report.BugReportButton
@@ -102,9 +107,42 @@ fun SettingsScreen(
             TextButton(onClick = onLicenses, contentPadding = PaddingValues(0.dp)) {
                 Text(stringResource(R.string.settings_about_licenses))
             }
+            SourceCodeButton()
         }
 
         Spacer(Modifier.height(24.dp))
+    }
+}
+
+/**
+ * Opens the project page in whatever browser the device has.
+ *
+ * The app itself still holds no INTERNET permission and makes no request of its
+ * own — handing a URL to another app is the browser's business, not ours. That
+ * is also why this needs no `<queries>` entry: apps handling a web intent are
+ * visible by default under Android 11's package visibility rules.
+ *
+ * A device genuinely without any browser is rare but possible (a locked-down
+ * tablet), so the missing-handler case is caught rather than left to crash.
+ */
+@Composable
+private fun SourceCodeButton() {
+    val context = LocalContext.current
+    val url = stringResource(R.string.url_source)
+    val noBrowser = stringResource(R.string.settings_about_no_browser)
+
+    TextButton(
+        onClick = {
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+            try {
+                context.startActivity(intent)
+            } catch (_: ActivityNotFoundException) {
+                Toast.makeText(context, noBrowser, Toast.LENGTH_SHORT).show()
+            }
+        },
+        contentPadding = PaddingValues(0.dp),
+    ) {
+        Text(stringResource(R.string.settings_about_source))
     }
 }
 

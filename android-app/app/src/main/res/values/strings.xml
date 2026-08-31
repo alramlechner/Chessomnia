@@ -63,6 +63,10 @@
     <string name="settings_about_desc">Chessomnia replaces the physical chess board. There is no computer opponent and no move suggestion.</string>
     <string name="settings_about_credits">Chess pieces: Colin M. L. Burnett (\"Cburnett\"), Wikimedia Commons. Wordmark set in Montserrat.</string>
     <string name="settings_about_licenses">Show licenses</string>
+    <string name="settings_about_source">Source code on GitHub</string>
+    <!-- The project page. Not translatable: it is one address, in one place. -->
+    <string name="url_source" translatable="false">https://github.com/alramlechner/Chessomnia</string>
+    <string name="settings_about_no_browser">No app found to open the link.</string>
 
     <!-- Pause curtain over the board -->
     <string name="paused">Paused</string>

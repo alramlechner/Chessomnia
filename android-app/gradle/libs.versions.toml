@@ -11,6 +11,7 @@ navigationCompose = "2.9.8"
 lifecycleViewmodelCompose = "2.9.4"
 kotlinxSerialization = "1.11.0"
 junit = "4.13.2"
+playPublisher = "3.9.1"
 
 # WARNING: the ceiling is AGP 8.13.2 with compileSdk 36. Newer AndroidX releases
 # (core-ktx >= 1.18, compose-ui >= 1.12, activity >= 1.12) already require
@@ -36,3 +37,4 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+play-publisher = { id = "com.github.triplet.play", version.ref = "playPublisher" }
