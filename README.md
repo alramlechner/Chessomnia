@@ -4,11 +4,11 @@
 
 # Chessomnia
 
-**A chess board for two people sharing one tablet. Not a chess computer.**
+**A chess board for two people sharing one device. Not a chess computer.**
 
 Chessomnia replaces the physical board when you don't have one to hand. Two players
-sit opposite each other, the tablet lies flat on the table between them, and they play
-the way they would on wood and felt — except the app knows the rules.
+sit opposite each other, the tablet — or phone — lies flat on the table between them,
+and they play the way they would on wood and felt, except that the app knows the rules.
 
 There is **no computer opponent, no position evaluation and no move suggestion**. That is
 a deliberate product decision, not a missing feature. The app knows the rules; it does
@@ -16,6 +16,17 @@ not know strategy.
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android%2011%2B-green.svg)](#building)
+
+<p align="center">
+  <img src="store/screenshots/phone-1-castling.png" width="45%"
+       alt="The king selected, its legal moves marked, castling highlighted separately">
+  <img src="store/screenshots/phone-2-en-passant.png" width="45%"
+       alt="An en passant capture offered on the board">
+</p>
+
+<p align="center"><em>Tap a piece and every legal move is marked &mdash; with castling
+and en passant called out separately, because those are the ones beginners miss.
+More in <a href="store/screenshots">store/screenshots</a>.</em></p>
 
 ---
 
@@ -46,8 +57,8 @@ No engine. No move list or SAN notation. No PGN export. No opening book. No onli
   no account. Nothing is uploaded, ever.
 - **Fully offline.** The release build requests **zero Android permissions** — not even
   `INTERNET`. You can verify that yourself in [`AndroidManifest.xml`](android-app/app/src/main/AndroidManifest.xml).
-- **Not a chess computer.** If you want an opponent or an evaluation bar, this is the
-  wrong app, and happily so.
+- **Not a chess computer.** No opponent, no evaluation bar. That is a deliberate
+  decision, not a missing feature.
 
 ## Privacy
 
@@ -63,11 +74,12 @@ Full statement: [PRIVACY.md](PRIVACY.md).
 
 ## Design decisions worth knowing
 
-These follow from one premise — *the tablet lies flat on the table between two people*:
+These follow from one premise — *the device lies flat on the table between two people*.
+A tablet suits that best; on a phone the board is simply smaller:
 
 - **The board never rotates automatically.** One player sees it upside down, exactly as at
-  a real board. That is the point, not a defect. "Swap colours" turns the board 180° so
-  nobody has to pick the tablet up.
+  a real board. That is the point, not a defect. "Turn the board" rotates it 180° so
+  nobody has to pick the device up.
 - **Dialogs turn to face whoever asked.** A promotion dialog in a fixed orientation would
   be unreadable for one of the two players every time. Every prompt therefore carries the
   player who triggered it.

@@ -54,7 +54,7 @@
 
     <string name="settings_section_screen">Display</string>
     <string name="settings_keep_screen_on_title">Keep the screen on</string>
-    <string name="settings_keep_screen_on_desc">The tablet will not switch off during a game.</string>
+    <string name="settings_keep_screen_on_desc">The device will not switch off during a game.</string>
 
     <string name="settings_section_bugreport">Report a problem</string>
     <string name="settings_bugreport_desc">Sends the current game with all its moves as plain text to an app of your choice — enough to reproduce a disputed position exactly.</string>

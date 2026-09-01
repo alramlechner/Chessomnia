@@ -15,9 +15,9 @@ Echtes Schachbrett für zwei. Kein Computergegner, keine Werbung, kein Tracking.
 ## Vollständige Beschreibung (max. 4000 Zeichen)
 
 ```
-Chessomnia macht aus deinem Tablet ein Schachbrett. Zwei Spieler, ein Gerät, einander gegenüber — genau wie an einem echten Brett.
+Chessomnia macht aus deinem Tablet oder Handy ein Schachbrett. Zwei Spieler, ein Gerät, einander gegenüber — genau wie an einem echten Brett.
 
-Es ist KEIN Schachcomputer. Es gibt keine Engine, keinen Gegner zum Spielen, keine Stellungsbewertung und keine Zugempfehlung. Chessomnia kennt die Regeln, nicht die Strategie. Wer einen Computergegner sucht, ist hier falsch — und das ist Absicht.
+Es ist KEIN Schachcomputer. Es gibt keine Engine, keinen Gegner zum Spielen, keine Stellungsbewertung und keine Zugempfehlung. Chessomnia kennt die Regeln, nicht die Strategie. Das ist eine bewusste Entscheidung, kein fehlendes Feature.
 
 
 KOSTENLOS, WERBEFREI, OHNE TRACKING
@@ -38,7 +38,7 @@ Es geht um die zwei Menschen am Tisch. Chessomnia übernimmt genau die Aufgaben,
 
 • Es kennt jede Regel, samt Rochade, en passant, Umwandlung, 50-Züge-Regel, dreifacher Wiederholung und totem Material.
 • Es lässt keinen unerlaubten Zug durch und übersieht kein Matt.
-• Es lässt die Figuren stehen, wo sie stehen, wenn das Tablet einschläft.
+• Es lässt die Figuren stehen, wo sie stehen, wenn das Gerät einschläft.
 
 
 LERNHILFE, KEIN LEHRER
@@ -48,13 +48,15 @@ Figur antippen — und jedes Feld, auf das sie ziehen darf, wird markiert. Rocha
 Was es nie geben wird: einen Vorschlag, welchen Zug du spielen sollst. Das herauszufinden ist das Spiel.
 
 
-GEBAUT FÜR EIN FLACH LIEGENDES TABLET
+GEBAUT FÜR EIN GERÄT, DAS FLACH AUF DEM TISCH LIEGT
+
+Am schönsten ist das auf einem Tablet. Auf dem Handy funktioniert es genauso — das Brett wird kleiner, sonst ändert sich nichts.
 
 Alles folgt aus dieser einen Idee:
 
 • Uhr, Status und Knöpfe gibt es zweimal, je an einer Tischkante — niemand liest verkehrt herum.
 • Die Figuren des Gegenübers werden gedreht gezeichnet, so wie am Holzbrett die dreidimensionale Form der Figur diese Aufgabe erledigt.
-• „Farben tauschen" dreht das Brett, statt dass jemand das Tablet umdrehen muss.
+• „Brett drehen" dreht es an Ort und Stelle, statt dass jemand das Gerät hochheben muss.
 • Rückfragen und der Umwandlungsdialog drehen sich zu dem, der sie ausgelöst hat.
 • Am Partieende verdeckt nichts das Brett. Nach einem Matt willst du sehen, warum — der markierte König und der hervorgehobene letzte Zug sind die Antwort.
 

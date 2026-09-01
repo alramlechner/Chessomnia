@@ -49,7 +49,7 @@
 
     <string name="settings_section_screen">Bildschirm</string>
     <string name="settings_keep_screen_on_title">Bildschirm anlassen</string>
-    <string name="settings_keep_screen_on_desc">Während einer Partie schaltet sich das Tablet nicht ab.</string>
+    <string name="settings_keep_screen_on_desc">Während einer Partie schaltet sich das Gerät nicht ab.</string>
 
     <string name="settings_section_bugreport">Fehler melden</string>
     <string name="settings_bugreport_desc">Sendet die laufende Partie mit allen Zügen als Text an eine App deiner Wahl — damit lässt sich eine strittige Stellung genau nachstellen.</string>

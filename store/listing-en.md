@@ -17,9 +17,9 @@ A chess board for two players. No engine, no ads, no tracking. Fully offline.
 ## Full description (4000 characters max)
 
 ```
-Chessomnia turns your tablet into a chess board. Two players, one device, sitting opposite each other — exactly as you would at a real board.
+Chessomnia turns your tablet or phone into a chess board. Two players, one device, sitting opposite each other — exactly as you would at a real board.
 
-It is NOT a chess computer. There is no engine, no opponent to play against, no evaluation bar and no move suggestions. Chessomnia knows the rules, not strategy. If you want a computer opponent, this is the wrong app — and happily so.
+It is NOT a chess computer. There is no engine, no opponent to play against, no evaluation bar and no move suggestions. Chessomnia knows the rules, not strategy. That is a deliberate decision, not a missing feature.
 
 
 FREE, AD-FREE, TRACKING-FREE
@@ -40,7 +40,7 @@ The point is the two people at the table. Chessomnia takes over exactly the jobs
 
 • It knows every rule, including castling, en passant, promotion, the fifty-move rule, threefold repetition and dead positions.
 • It never lets an illegal move through, and it never misses a checkmate.
-• It keeps the pieces where you put them when the tablet goes to sleep.
+• It keeps the pieces where you put them when the device goes to sleep.
 
 
 A LEARNING AID, NOT A TEACHER
@@ -50,13 +50,15 @@ Tap a piece and every square it may legally move to is marked — with castling 
 What you will never get is a suggestion of which move to play. Working that out is the game.
 
 
-BUILT FOR A TABLET LYING FLAT ON THE TABLE
+BUILT FOR A DEVICE LYING FLAT ON THE TABLE
+
+A tablet suits it best. A phone works just as well — the board is smaller, nothing else changes.
 
 Everything follows from that one idea:
 
 • Clock, status and buttons exist twice, once at each player's edge, so neither of you is reading upside down.
 • The pieces of the player sitting opposite are drawn rotated, just as the three-dimensional shape of a real piece does the job at a wooden board.
-• "Swap colours" turns the board instead of making somebody pick the tablet up.
+• "Turn the board" rotates it in place, instead of somebody having to pick the device up.
 • Prompts and the promotion dialog turn to face whoever triggered them.
 • When a game ends, nothing covers the board. After a mate you want to see why — the highlighted king and the marked last move are the answer.
 

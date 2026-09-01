@@ -124,11 +124,12 @@ def main():
         "Chessomnia — a chess board for two players",
         f'''<img class="mark" src="icon.png" alt="">
 <h1>Chessomnia</h1>
-<p class="lede">A chess board for two people sharing one tablet.
+<p class="lede">A chess board for two people sharing one device.
 Not a chess computer.</p>
-<p>Two players sit opposite each other, the tablet lies flat on the table between
-them, and they play the way they would on wood and felt &mdash; except the app
-knows the rules. There is no engine, no evaluation and no move suggestion.</p>
+<p>Two players sit opposite each other, the tablet &mdash; or phone &mdash; lies flat
+on the table between them, and they play the way they would on wood and felt, except
+that the app knows the rules. There is no engine, no evaluation and no move
+suggestion.</p>
 <p>Free, ad-free, tracking-free, and it works entirely offline: the app holds no
 permission that grants it anything, not even internet access.</p>
 <h2>More</h2>
@@ -136,8 +137,8 @@ permission that grants it anything, not even internet access.</p>
   <li><a href="privacy.html">Privacy policy</a> &mdash; short version: nothing is collected</li>
   <li><a href="{REPO}">Source code on GitHub</a> (Apache&nbsp;2.0)</li>
 </ul>''',
-        "Chessomnia is a chess board for two players on one tablet. No engine, "
-        "no ads, no tracking, fully offline.",
+        "Chessomnia is a chess board for two players on one tablet or phone. "
+        "No engine, no ads, no tracking, fully offline.",
     ), encoding="utf-8")
 
     for f in sorted(DOCS.iterdir()):

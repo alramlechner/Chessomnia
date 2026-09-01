@@ -39,6 +39,13 @@ private repository.
   always being English — would not have been.
 
 ### Changed
+- The descriptions no longer say "tablet" where any Android device will do. The app
+  is designed around a tablet lying flat on the table, but it runs on a phone from
+  Android 11 onwards — and a store listing that says "tablet" loses the reader who
+  is holding a phone.
+- Dropped the "if you want an opponent, this is the wrong app" line from the store
+  listings and the README. Setting the expectation is right; telling the reader they
+  are in the wrong place is not.
 - Minimum Android version lowered from 15 to **11** (`minSdk` 35 → 30). The app never used
   any Android 15 API.
 - `targetSdk` raised to 36 (Android 16), with the toolchain moved to AGP 8.13 / Gradle
