@@ -2,6 +2,7 @@ package name.lechners.chessomnia.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import name.lechners.chessomnia.engine.Level
 import name.lechners.chessomnia.rules.GameStatus
 import name.lechners.chessomnia.rules.Side
 
@@ -31,9 +32,30 @@ data class GameSnapshot(
     @SerialName("black_ms") val blackElapsedMs: Long,
     /** See [encodeResult]; null = game running, or the outcome follows from the position. */
     val result: String? = null,
+    /**
+     * The opponent, if this game has one. Two nullable fields rather than a nested
+     * object: both default to null, so a game saved before there was an opponent loads
+     * as the two-player game it was, with no migration step.
+     */
+    @SerialName("opponent_level") val opponentLevel: String? = null,
+    @SerialName("engine_side") val engineSide: String? = null,
 ) {
     companion object {
         const val CURRENT = 2
+
+        fun encodeOpponent(config: OpponentConfig?): Pair<String?, String?> =
+            config?.let { it.level.name to it.enginePlays.name } ?: (null to null)
+
+        /**
+         * Unknown values decode to "no opponent" rather than throwing: a level that a
+         * later version removed must not make the saved game unreadable.
+         */
+        fun decodeOpponent(level: String?, side: String?): OpponentConfig? {
+            if (level == null || side == null) return null
+            val parsedLevel = Level.entries.firstOrNull { it.name == level } ?: return null
+            val parsedSide = Side.entries.firstOrNull { it.name == side } ?: return null
+            return OpponentConfig(parsedLevel, parsedSide)
+        }
 
         fun encodeResult(status: GameStatus): String? = when (status) {
             is GameStatus.Resigned -> "RESIGNED_${status.winner}"

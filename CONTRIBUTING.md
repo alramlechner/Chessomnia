@@ -4,13 +4,18 @@ Thanks for looking. A few things worth knowing before you spend time on a change
 
 ## Scope
 
-Chessomnia is a **replacement for a physical chess board**, not a chess program. The
-following will be declined regardless of how well they are implemented:
+Chessomnia is a **replacement for a physical chess board** that can also play against you.
+The following will be declined regardless of how well they are implemented:
 
-- a computer opponent or any engine
-- position evaluation, an evaluation bar, best-move hints
-- opening books, endgame tablebases
+- position evaluation shown to the player, an evaluation bar, best-move hints
+- endgame tablebases
 - online or networked play
+- accounts, advertising, or anything that is not free to use
+
+**Making the opponent stronger is also out of scope.** The ceiling is deliberately a good
+club amateur: this is a board for the family table, and an opponent nobody can beat is not
+a feature. Transposition tables, deeper search and a bundled strong engine have all been
+considered and set aside — see `ARCHITECTURE.md`, *The opponent*.
 
 That boundary is the product, not an oversight. Everything else is open for discussion.
 
@@ -42,6 +47,23 @@ makes perft disagree is wrong, even if it looks right.
 
 If you add a rule case, add it to the reference corpus rather than hand-writing the
 expectation. Hand-written chess test data is unreliable — see the note in the README.
+
+## Working on the opponent
+
+`engine/` is pure Kotlin with no Android imports too, for the same reason: whether an
+opponent actually mates can only be settled by playing games out.
+
+⚠️ **A change that makes the engine play better is not automatically an improvement.**
+Check `GamePlayTest` — it plays whole games and insists that queen-and-king and
+rook-and-king are converted to mate. Those are the tests that catch the classic failure of
+a small engine: the won endgame it never finishes, shuffling until the fifty-move rule
+ends it in a draw. A mate-in-one test would never notice.
+
+Speed work should quote before-and-after numbers from the benchmark:
+
+```bash
+./gradlew testDebugUnitTest --tests "*EngineBenchmark*" -DengineBench=1
+```
 
 ## Translations
 

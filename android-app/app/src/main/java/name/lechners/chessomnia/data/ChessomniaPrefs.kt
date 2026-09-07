@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.json.Json
+import name.lechners.chessomnia.engine.Level
 import name.lechners.chessomnia.rules.Side
 
 /**
@@ -75,6 +76,12 @@ class ChessomniaPrefs(context: Context) {
         boardBottomSide = if (prefs.getBoolean(KEY_BOTTOM_IS_WHITE, true)) Side.WHITE else Side.BLACK,
         allowTakeback = prefs.getBoolean(KEY_ALLOW_TAKEBACK, true),
         keepScreenOn = prefs.getBoolean(KEY_KEEP_SCREEN_ON, true),
+        // An unknown level falls back to the default rather than throwing: a level that a
+        // later version renames must not make the app unable to start.
+        opponentLevel = prefs.getString(KEY_OPPONENT_LEVEL, null)
+            ?.let { name -> Level.entries.firstOrNull { it.name == name } }
+            ?: Level.CASUAL,
+        opponentHumanPlaysWhite = prefs.getBoolean(KEY_OPPONENT_HUMAN_WHITE, true),
     )
 
     private fun writeSettings(s: Settings) {
@@ -85,6 +92,8 @@ class ChessomniaPrefs(context: Context) {
             .putBoolean(KEY_BOTTOM_IS_WHITE, s.boardBottomSide == Side.WHITE)
             .putBoolean(KEY_ALLOW_TAKEBACK, s.allowTakeback)
             .putBoolean(KEY_KEEP_SCREEN_ON, s.keepScreenOn)
+            .putString(KEY_OPPONENT_LEVEL, s.opponentLevel.name)
+            .putBoolean(KEY_OPPONENT_HUMAN_WHITE, s.opponentHumanPlaysWhite)
             .apply()
     }
 
@@ -115,6 +124,8 @@ class ChessomniaPrefs(context: Context) {
         const val KEY_KEEP_SCREEN_ON = "keep_screen_on"
         /** Only still here for migration v3 (the cleanup). */
         const val KEY_ORIENTATION = "screen_orientation"
+        const val KEY_OPPONENT_LEVEL = "opponent_level"
+        const val KEY_OPPONENT_HUMAN_WHITE = "opponent_human_white"
         const val KEY_GAME = "current_game"
         const val KEY_SETTINGS_VERSION = "settings_version"
         const val SETTINGS_VERSION = 4

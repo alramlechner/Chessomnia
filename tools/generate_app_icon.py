@@ -12,6 +12,7 @@ Produces:
     res/drawable/ic_launcher_foreground.xml   adaptive icon, foreground layer
     res/drawable/ic_launcher_monochrome.xml   themed icon (Android 13+), one colour
     res/drawable/logo_mark.xml                same artwork, cropped, for in-app use
+    res/drawable-night/logo_mark.xml          ditto, for a dark theme
 
 The launcher layers are drawn on the 108x108 grid Android expects. Placement is
 not eyeballed: the composition is fitted so that its corners sit on the 72dp
@@ -33,8 +34,10 @@ import re
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 RES = ROOT / "android-app/app/src/main/res/drawable"
+RES_NIGHT = ROOT / "android-app/app/src/main/res/drawable-night"
 
 WHITE = "#FFFFFF"
+NAVY = "#2B303E"
 BLUE = "#3193C6"
 
 # --------------------------------------------------------------- silhouettes
@@ -144,9 +147,10 @@ def vector(what, w, h, vw, vh, paths):
             f"{body}</vector>\n")
 
 
-def write(name, text):
-    (RES / name).write_text(text)
-    print(f"  {name}  ({len(text)} bytes)")
+def write(name, text, out=RES):
+    out.mkdir(parents=True, exist_ok=True)
+    (out / name).write_text(text)
+    print(f"  {out.name}/{name}  ({len(text)} bytes)")
 
 
 def main():
@@ -170,10 +174,21 @@ def main():
     qp = piece_paths("queen", PLACE_QUEEN, m - x0, m - y0)
     kp = piece_paths("king", PLACE_KING, m - x0, m - y0)
     w, h = x1 - x0 + 2 * m, y1 - y0 + 2 * m
-    write("logo_mark.xml", vector(
-        "The mark on its own, cropped to the artwork. Used on the home screen.",
-        round(w), round(h), num(w), num(h),
-        [(d, BLUE) for d in qp] + [(d, WHITE) for d in kp]))
+    # The king is white because on the launcher it stands on the navy
+    # background layer, where white reads as "the white king". The home screen
+    # has no such backdrop -- the mark sits directly on the theme surface, so a
+    # fixed colour cannot work for both themes. Version 1.1.4 shipped the
+    # launcher's white king here and it was invisible on every light-mode
+    # device.
+    #
+    # The -night qualifier keys off Configuration.UI_MODE_NIGHT, which is the
+    # same signal ChessomniaTheme reads through isSystemInDarkTheme(). The two
+    # therefore cannot drift apart the way a hand-picked colour would.
+    for out, king in ((RES, NAVY), (RES_NIGHT, WHITE)):
+        write("logo_mark.xml", vector(
+            "The mark on its own, cropped to the artwork. Used on the home screen.",
+            round(w), round(h), num(w), num(h),
+            [(d, BLUE) for d in qp] + [(d, king) for d in kp]), out)
 
 
 if __name__ == "__main__":

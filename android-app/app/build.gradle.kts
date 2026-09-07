@@ -124,7 +124,9 @@ dependencies {
 }
 
 // Deep perft runs only on request: ./gradlew test -DperftDeep=1
-// Without forwarding it, the test JVM would not see the Gradle process's property.
+// The engine benchmark likewise: ./gradlew test -DengineBench=1
+// Without forwarding them, the test JVM would not see the Gradle process's properties.
 tasks.withType<Test>().configureEach {
     System.getProperty("perftDeep")?.let { systemProperty("perftDeep", it) }
+    System.getProperty("engineBench")?.let { systemProperty("engineBench", it) }
 }

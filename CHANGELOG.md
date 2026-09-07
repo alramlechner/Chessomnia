@@ -6,6 +6,68 @@ uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- **An optional opponent.** The home screen now offers the choice directly:
+  *Two players* or *Play the device*, the latter with three strengths and a choice
+  of colour. The board turns to your colour, and the device's panel is not rotated
+  — nobody is sitting at that edge.
+
+  Both ways of starting discard a game in progress, so both ask first. The strength
+  and colour are only requested once the running game has actually been given up.
+
+  The engine is written for this app and built on the existing rule engine
+  unchanged, so a move it plays is legal by the identical code the board itself
+  uses. Alpha-beta with a quiescence search; no bundled third-party engine, no
+  network, no new permission, and the project stays Apache-2.0.
+
+  Strength is deliberately capped at a good club amateur. It is set by a
+  tolerance around the best move rather than by search depth alone — a
+  depth-limited engine sees two moves perfectly and then hangs a rook, which
+  reads as broken rather than as beatable. Two things override the tolerance: a
+  forced mate is always played, and a bare-king endgame is converted at full
+  strength. Being handed a draw because the opponent could not finish would read
+  as a broken app, not a weak one.
+
+  Taking a move back against the device undoes both halfmoves, so it is your turn
+  again. The opponent is stored with the game, so a restart does not silently
+  turn it back into a two-player game.
+
+### Fixed
+- **The king was invisible on the home screen in the light theme.** The mark is
+  generated from the same source as the launcher icon and had inherited its
+  colours — where a white king is correct, because the launcher draws it on its
+  own navy background layer. The home screen has no such layer: the mark sits
+  directly on the theme surface, so a white king on a light surface came out at
+  a contrast of 1.05:1. Reported by a tester on 1.1.4.
+- The wordmark had the same defect in the dark theme, in the other direction:
+  its gradient starts at navy `#2B303E`, which is 1.32:1 against the dark
+  background, so the first letters of CHESSOMNIA faded out. Found while fixing
+  the king — a fixed colour cannot serve both themes.
+
+  Both marks now have a `drawable-night/` variant, and their generators write
+  both files in one run rather than leaving the second to be copied by hand. The
+  `-night` qualifier keys off `UI_MODE_NIGHT`, the same signal `ChessomniaTheme`
+  reads through `isSystemInDarkTheme()`, so the artwork cannot drift away from
+  the theme that picks it.
+
+### Changed
+- Texts that promised the app had no opponent have been corrected: the home
+  screen tagline and footer, and the *About* section in the settings. The footer
+  now names what still holds — no ads, no account, no internet.
+
+  ⚠️ The Play Store listings under `store/` and the project page in `docs/` still
+  say "not a chess computer". They are deliberately left for whoever publishes the
+  release, so that the repository does not describe the app differently from what
+  is live in the store.
+- Starting a new game from the player panel no longer asks for confirmation when
+  no game is in progress — that is, once the current one is decided, or before
+  anyone has moved. The question was worth asking mid-game and misleading
+  otherwise: it says "the current game with 41 moves will be lost", when the game
+  has in fact already ended and nothing is lost by leaving it. The home screen has
+  always behaved this way; only the in-game button asked regardless.
+
+## [1.1.4] — 2026-09-01
+
 First public release, prepared for Google Play. Development up to this point happened in a
 private repository.
 

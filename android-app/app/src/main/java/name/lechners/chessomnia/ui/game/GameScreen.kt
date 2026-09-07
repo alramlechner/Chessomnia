@@ -44,6 +44,21 @@ fun GameScreen(
     val curtain by vm.curtain.collectAsState()
     var confirm by remember { mutableStateOf<ConfirmAction?>(null) }
 
+    // Asking before starting over is only worth it while a game is actually in
+    // progress. Once it is decided, the board is a finished picture and there is
+    // nothing left to lose -- and the question would claim otherwise, since the
+    // wording is "the current game with 41 moves will be lost". The same goes for
+    // a game nobody has moved in yet.
+    //
+    // This is the condition GameViewModel.hasResumableGame already uses, which is
+    // why the home screen has always started over without asking; only the button
+    // in the player panel asked regardless.
+    val gameInProgress = state.moveCount > 0 && !state.status.isOver
+    val startNewGame = { initiator: Side ->
+        if (gameInProgress) confirm = ConfirmAction.NewGame(initiator, state.moveCount)
+        else vm.restartGame()
+    }
+
     // Thinking time runs while the board is visible. The menu does NOT end the game,
     // but no time should accrue there either - so resume on entering and pause on
     // leaving. Since the clock never expires, resuming automatically is harmless.
@@ -59,6 +74,11 @@ fun GameScreen(
     val capturedBottom = if (bottom == Side.WHITE) state.capturedByWhite else state.capturedByBlack
     val capturedTop = if (top == Side.WHITE) state.capturedByWhite else state.capturedByBlack
     val advantage = materialValue(capturedBottom) - materialValue(capturedTop)
+
+    // The upper edge is turned upside down for the person sitting there - but when the
+    // device holds that colour, nobody does. Rotating its panel would only make it
+    // unreadable for the one person who is actually at the table.
+    val topIsEngine = state.engineSide != null && state.engineSide == top
 
     // The system back gesture closes whatever is on top first. Without this it would
     // fall straight through to the activity and leave the app, which is exactly what it
@@ -87,12 +107,13 @@ fun GameScreen(
                 allowTakeback = state.allowTakeback,
                 onTakeback = { confirm = ConfirmAction.Takeback(top) },
                 onSwapSides = vm::swapSides,
-                onNewGame = { confirm = ConfirmAction.NewGame(top, state.moveCount) },
+                onNewGame = { startNewGame(top) },
                 onExit = onExit,
-                modifier = Modifier.rotate(180f),
+                modifier = if (topIsEngine) Modifier else Modifier.rotate(180f),
+                isEngine = topIsEngine,
             )
 
-            CapturedRow(capturedTop, -advantage, state.halfmoveClock, rotated = true, Modifier.padding(top = 4.dp))
+            CapturedRow(capturedTop, -advantage, state.halfmoveClock, rotated = !topIsEngine, Modifier.padding(top = 4.dp))
 
             BoxWithConstraints(
                 Modifier.weight(1f).fillMaxWidth().padding(vertical = 4.dp),
@@ -140,8 +161,9 @@ fun GameScreen(
                 allowTakeback = state.allowTakeback,
                 onTakeback = { confirm = ConfirmAction.Takeback(bottom) },
                 onSwapSides = vm::swapSides,
-                onNewGame = { confirm = ConfirmAction.NewGame(bottom, state.moveCount) },
+                onNewGame = { startNewGame(bottom) },
                 onExit = onExit,
+                isEngine = state.engineSide != null && state.engineSide == bottom,
             )
         }
 
@@ -164,7 +186,7 @@ fun GameScreen(
                 onConfirm = {
                     when (action) {
                         is ConfirmAction.Takeback -> vm.takeback()
-                        is ConfirmAction.NewGame -> vm.newGame()
+                        is ConfirmAction.NewGame -> vm.restartGame()
                     }
                     confirm = null
                 },

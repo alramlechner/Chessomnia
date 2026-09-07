@@ -32,6 +32,7 @@ from the contour of the real Montserrat E, so they keep the font's stroke weight
 its heights and its differing bar lengths; the glyph's advance width is unchanged,
 so the remaining letters do not shift.
 """
+import pathlib
 import sys
 import xml.sax.saxutils as sax
 
@@ -47,6 +48,13 @@ TEXT = "CHESSOMNIA"
 # App palette (ui/theme/Color.kt). The board colours are deliberately independent.
 COLOR_START = "#2B303E"
 COLOR_END = "#3193C6"
+
+# The gradient runs from the theme's text colour to the brand blue. In a dark
+# theme the navy start sits at 1.3:1 against the background (ui/theme/Color.kt,
+# AppBackground #161A22) -- readable on paper, invisible on a screen, and the
+# first letters of the word are the ones that vanish. Only the start moves; the
+# blue anchor is the same in both themes.
+COLOR_START_NIGHT = "#E8ECF2"   # TextPrimary
 
 FONT_SIZE = 100.0   # arbitrary; the path is normalised against PAD afterwards anyway
 PAD = 8.0           # margin left/right so the gradient does not start on the glyph
@@ -232,6 +240,14 @@ def main(argv):
 
     print(f"{out_path}: {width}x{height} viewport, {width_dp}x{HEIGHT_DP} dp, "
           f"{len(path_data)} chars of path data")
+
+    # Same outlines, dark-theme gradient. Written as a sibling so that one run
+    # keeps both in step; hand-copying the file is how the two would drift.
+    night = pathlib.Path(out_path).parent.parent / "drawable-night" / pathlib.Path(out_path).name
+    assert xml.count(COLOR_START) == 1, "gradient start is no longer unique in the output"
+    night.parent.mkdir(parents=True, exist_ok=True)
+    night.write_text(xml.replace(COLOR_START, COLOR_START_NIGHT), encoding="utf-8")
+    print(f"{night}: dark-theme variant")
 
     if svg_path:
         with open(svg_path, "w", encoding="utf-8") as fh:

@@ -63,6 +63,14 @@ fun PlayerPanel(
     onNewGame: () -> Unit,
     onExit: () -> Unit,
     modifier: Modifier = Modifier,
+    /**
+     * This panel belongs to the device rather than to a person.
+     *
+     * It then carries no action buttons: nobody sits at that edge of the table, and a
+     * second set of controls facing an empty chair only invites a misclick. Everything
+     * stays reachable from the human's own panel.
+     */
+    isEngine: Boolean = false,
 ) {
     val over = state.status.isOver
     val isToMove = !over && state.sideToMove == side
@@ -93,8 +101,13 @@ fun PlayerPanel(
 
                 Column(Modifier.weight(1f)) {
                     Text(
-                        if (over) stringResource(headlineFor(outcome))
-                        else stringResource(sideNameRes(side)),
+                        when {
+                            over -> stringResource(headlineFor(outcome))
+                            isEngine -> stringResource(
+                                R.string.opponent_headline, stringResource(sideNameRes(side))
+                            )
+                            else -> stringResource(sideNameRes(side))
+                        },
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = when {
@@ -106,19 +119,19 @@ fun PlayerPanel(
                     )
                     Text(
                         if (over) reasonFor(state.status).resolve()
-                        else stringResource(runningStatusLine(state, side)),
+                        else stringResource(runningStatusLine(state, side, isEngine)),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
 
-                if (!compact) {
+                if (!compact && !isEngine) {
                     Actions(over, state.canTakeback && allowTakeback, clockEnabled,
                         clockRunning, onToggleClock, onTakeback, onSwapSides, onNewGame, onExit)
                 }
             }
 
-            if (compact) {
+            if (compact && !isEngine) {
                 Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
@@ -241,8 +254,14 @@ internal fun reasonFor(status: GameStatus): ResText = when (status) {
 
 /** The status line during a game, from THIS player's point of view. */
 @StringRes
-private fun runningStatusLine(state: GameUiState, side: Side): Int = when {
+private fun runningStatusLine(state: GameUiState, side: Side, isEngine: Boolean): Int = when {
+    // Check first even for the device: that its king is attacked is worth more to the
+    // person opposite than knowing it is searching.
     state.inCheck == side -> R.string.status_check
+    // "Your turn" would be addressed to nobody. Read from the device's turn rather than
+    // from the thinking flag, so the line does not flicker in the gap between the move
+    // landing and the next search starting.
+    isEngine && state.sideToMove == side -> R.string.status_thinking
     state.sideToMove == side -> R.string.status_your_turn
     else -> R.string.status_opponent_turn
 }

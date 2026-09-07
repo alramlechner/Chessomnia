@@ -56,6 +56,12 @@ class ChessGame private constructor(
 
     fun pieceAt(sq: Square): Piece? = position.pieceAt(sq)
 
+    /**
+     * A copy of the repetition history, safe to hand to the engine's background thread.
+     * Without it the engine would shuffle a won position into a threefold draw.
+     */
+    fun repetitionSnapshot(): RepetitionTracker = repetition.snapshot()
+
     fun movesFrom(sq: Square): List<Move> = legalMoves[sq] ?: emptyList()
 
     /**

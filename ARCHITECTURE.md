@@ -3,8 +3,10 @@
 A chess board for Android tablets. **It replaces the physical board** — two people play
 each other on one device.
 
-**Explicitly not a chess computer:** no virtual opponent, no position evaluation, no move
-suggestion. The app knows the rules, not strategy.
+Since the engine package it can also be **one person against the device**. What stays out
+is everything that would turn the board into an analysis tool: no evaluation bar, no
+"best move" hint, no opening explorer. The opponent plays its move and says nothing about
+the human's position.
 
 Its second purpose is learning: tap a piece and every legal move for it is marked,
 including the special moves — castling, en passant, promotion — that beginners overlook.
@@ -18,7 +20,8 @@ including the special moves — castling, en passant, promotion — that beginne
 | Setup | **The tablet lies flat on the table and the players sit opposite each other** — as at a real board |
 | Board orientation | **Fixed, White always at the bottom.** No auto-rotation, no flip flag |
 | Learning aids | Mark legal moves · check/mate/stalemate · take back a move |
-| Deliberately absent | Move list / SAN notation, PGN export, any form of engine analysis |
+| Opponent | Optional. Three strengths, the top one a good club amateur — **not** as strong as it could be |
+| Deliberately absent | Move list / SAN notation, PGN export, any form of engine *analysis* shown to the player |
 | Clock | **Counts upward, never expires.** Fully switchable |
 | Pieces | Classic Staunton as VectorDrawables |
 | Extras | Start a new game from the board · the game survives an app restart · hints and takebacks switchable · the screen stays on |
@@ -132,6 +135,119 @@ ordinary JVM unit test (no Robolectric).
   en-passant capture is actually available.
 - **Insufficient material:** K–K, K+B–K, K+N–K, and K+B–K+B with same-coloured bishops.
   Deliberately **not** K+N+N–K — mate is possible there, merely not forcible.
+
+## The opponent
+
+`name.lechners.chessomnia.engine` — pure Kotlin, **no Android imports**, same rule as
+`rules/` and for the same reason: whether an opponent actually mates can only be settled
+by playing games out, and that has to run as an ordinary JVM test.
+
+### How it reaches the board
+
+`GameViewModel` owns an `OpponentConfig?` — the level and the colour the device plays, or
+null between two people. Everything else follows from it:
+
+- **It belongs to the game, not to the settings.** `GameSnapshot` stores it, so a restart
+  cannot quietly turn a game against the device into a two-player one that simply stops
+  answering. `Settings` only remembers what to preselect next time.
+- **The search runs on `Dispatchers.Default`**, over a FEN and a *copy* of the repetition
+  history. The game keeps being edited on the main thread; handing over the live objects
+  would be a data race.
+- ⚠️ **A cancelled search can still be in flight.** `engineGeneration` counts every search
+  started or abandoned, and a result whose generation is stale is dropped. Without it a
+  move found just before a takeback would land on the restored board.
+- **Taking back undoes more than one halfmove**: it keeps going until it is the human's
+  turn. Undoing only the device's reply would hand the board straight back to it.
+- **`maybeStartEngine()` is called from every path that can make it the device's turn** —
+  a move, a new game, a takeback, and returning to the board. It checks everything itself,
+  so calling it too often is free; missing one call means a board that never answers.
+- **A minimum thinking time of 350 ms.** The lower levels answer in about a millisecond,
+  and a reply in the same frame as one's own move reads as a glitch rather than as an
+  opponent.
+
+### It adds code and changes nothing
+
+`rules/` is untouched. The search walks the very same `makeMove`/`unmakeMove` that perft
+hammers, so a move the engine plays is legal by the identical code the board itself uses.
+Adding an opponent cannot make the app misjudge a mate.
+
+One deliberate departure from the UI path: the search calls `pseudoLegalMoves` and does
+the check test itself. `MoveGenerator.legalMoves` filters by making and unmaking every
+move — the search would then make and unmake it a second time, doubling the cost of every
+node. Same functions, same rules, half the work.
+
+### Search
+
+Iterative deepening, negamax with alpha-beta, and a quiescence search that plays out the
+captures before evaluating. Move ordering is MVV-LVA for captures, then killers, then a
+history table. No transposition table and no Zobrist hashing: that would mean either
+mirroring `makeMove`'s logic incrementally — a second source of truth for the rules — or
+hashing from scratch at every node. Neither is worth it at the strength being aimed for.
+
+Two consequences of that choice, both deliberate:
+
+- **Repetition is only tested at the root**, where the game's actual `RepetitionTracker`
+  is available. That is enough to stop the visible failure — a winning engine shuffling
+  into a threefold draw — without a hash inside the search.
+- **Every root move is searched with a full window**, so all root scores are exact and
+  comparable. That is what lets the difficulty setting pick a deliberately imperfect move
+  without a second search pass. It costs depth, which a family-strength opponent can
+  spare.
+
+### Evaluation
+
+Material, piece-square tables blended between a middlegame and an endgame set, pawn
+structure (doubled, isolated, passed), the bishop pair, and rooks on open files. The
+tables are written for this app rather than taken from anywhere; they encode the handful
+of principles a beginner is taught and nothing more.
+
+⚠️ **The bare-king term is load-bearing.** Once one side is down to a lone king, material
+and tables say the same thing about every move, and nothing points anywhere. Without a
+term that walks the weak king to the edge and brings the strong king up, the engine wins
+the queen and then shuffles until the fifty-move rule. `GamePlayTest` plays those endings
+out precisely because a mate-in-one test would never catch it.
+
+### Strength is a window, not a depth
+
+⚠️ Difficulty is **not** set by search depth alone. A depth-two engine sees two moves
+perfectly and then hangs a rook for no reason, which reads as broken rather than as
+beatable. The knob is `Level.windowCp`: the search scores every root move exactly, and the
+engine picks at random among those within that many centipawns of the best, capped at
+`maxCandidates`. A human settles for the second-best idea; it does not choose uniformly
+among thirty legal moves. Quiescence stays on at every level — it is what stops the engine
+from giving pieces away in a way that looks like a bug.
+
+Two situations override the window entirely:
+
+- **A forced mate**, given or received, is always played best-first. Losing a mate in one
+  to a dice roll makes an opponent feel random rather than weak.
+- **A bare-king endgame** is converted at full strength. The tolerance would swamp the
+  mating gradient, and a beginner should lose to a mate — being handed a draw because the
+  opponent could not finish reads as a broken app, not a weak one.
+
+### The clock is a ceiling, not a promise
+
+The first iteration ignores the time budget. However slow the device, a search that has
+not finished depth one holds nothing but zeroes and would make the engine play a random
+legal move. One slow move is a far better failure than a nonsensical one.
+
+### Measured
+
+On a Raspberry Pi 5 — comparable to a mid-range tablet — after JIT warm-up, roughly
+450–750 thousand nodes per second:
+
+| Level | Opening | Middlegame (Kiwipete) | Endgame |
+|---|---|---|---|
+| `BEGINNER` | depth 2, 1 ms | depth 2, 180 ms | depth 2, 1 ms |
+| `CASUAL` | depth 4, 20 ms | depth 2, 500 ms | depth 4, 23 ms |
+| `CLUB` | depth 6, 666 ms | depth 4, 1200 ms | depth 6, 454 ms |
+
+Kiwipete is a deliberately sharp test position, not a typical middlegame; it is the worst
+case rather than the average. Reproduce with:
+
+```bash
+./gradlew testDebugUnitTest --tests "*EngineBenchmark*" -DengineBench=1
+```
 
 ## The clock — counts upward, never ends the game
 

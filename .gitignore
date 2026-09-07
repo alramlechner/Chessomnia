@@ -18,3 +18,4 @@ play-service-account.json
 .idea/
 *.iml
 .DS_Store
+__pycache__/

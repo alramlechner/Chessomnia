@@ -1,5 +1,6 @@
 package name.lechners.chessomnia.data
 
+import name.lechners.chessomnia.engine.Level
 import name.lechners.chessomnia.rules.Side
 
 /**
@@ -27,4 +28,10 @@ data class Settings(
      */
     val allowTakeback: Boolean = true,
     val keepScreenOn: Boolean = true,
+    /**
+     * What the "play against the device" dialog preselects. Only a convenience - which
+     * opponent a game actually has is stored with the game itself, see [OpponentConfig].
+     */
+    val opponentLevel: Level = Level.CASUAL,
+    val opponentHumanPlaysWhite: Boolean = true,
 )

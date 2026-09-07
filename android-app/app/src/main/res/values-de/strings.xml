@@ -14,16 +14,16 @@
     <string name="side_black">Schwarz</string>
 
     <!-- Startbildschirm -->
-    <string name="home_tagline">Das Schachbrett für zwei Spieler</string>
+    <string name="home_tagline">Das Schachbrett für euren Tisch</string>
     <string name="home_resume">Partie fortsetzen</string>
     <plurals name="home_moves_played">
         <item quantity="one">%d Zug gespielt</item>
         <item quantity="other">%d Züge gespielt</item>
     </plurals>
-    <string name="home_new_game">Neue Partie starten</string>
+    <string name="home_new_game">Zu zweit spielen</string>
     <string name="home_settings">Einstellungen</string>
     <string name="home_version">Version %s</string>
-    <string name="home_footer">Kein Schachcomputer — nur das Brett.</string>
+    <string name="home_footer">Keine Werbung, kein Konto, kein Internet.</string>
     <string name="home_confirm_new_title">Neue Partie starten?</string>
     <plurals name="home_confirm_new_text">
         <item quantity="one">Die laufende Partie mit %d Zug geht dabei verloren.</item>
@@ -55,7 +55,7 @@
     <string name="settings_bugreport_desc">Sendet die laufende Partie mit allen Zügen als Text an eine App deiner Wahl — damit lässt sich eine strittige Stellung genau nachstellen.</string>
 
     <string name="settings_section_about">Über</string>
-    <string name="settings_about_desc">Chessomnia ersetzt das physische Schachbrett. Es gibt keinen Computergegner und keine Zugempfehlung.</string>
+    <string name="settings_about_desc">Chessomnia ersetzt das physische Schachbrett — wahlweise gegen jemanden am selben Tisch oder gegen das Gerät. Es gibt keine Stellungsbewertung und keine Zugempfehlung.</string>
     <string name="settings_about_credits">Schachfiguren: Colin M. L. Burnett (\"Cburnett\"), Wikimedia Commons. Schriftzug gesetzt aus Montserrat.</string>
     <string name="settings_about_licenses">Lizenzen anzeigen</string>
     <string name="settings_about_source">Quelltext auf GitHub</string>
@@ -98,6 +98,18 @@
     <string name="action_start_clock">Uhr starten</string>
     <string name="action_swap_colours">Brett drehen</string>
     <string name="action_new_game">Neue Partie starten</string>
+
+    <!-- Gegen das Gerät spielen -->
+    <string name="home_play_device">Gegen das Gerät</string>
+    <string name="opponent_dialog_title">Gegen das Gerät spielen</string>
+    <string name="opponent_strength">Stärke</string>
+    <string name="opponent_level_beginner">Anfänger</string>
+    <string name="opponent_level_casual">Fortgeschritten</string>
+    <string name="opponent_level_club">Vereinsspieler</string>
+    <string name="opponent_colour">Du spielst</string>
+    <string name="opponent_start">Starten</string>
+    <string name="opponent_headline">%s · Gerät</string>
+    <string name="status_thinking">denkt …</string>
 
     <!-- Umwandlung -->
     <string name="promotion_title">Umwandeln in</string>

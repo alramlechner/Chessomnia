@@ -4,25 +4,40 @@ import android.os.SystemClock
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import name.lechners.chessomnia.data.AppInfo
 import name.lechners.chessomnia.data.BugReport
 import name.lechners.chessomnia.data.BugReportData
 import name.lechners.chessomnia.data.ChessomniaPrefs
 import name.lechners.chessomnia.data.GameSnapshot
+import name.lechners.chessomnia.data.OpponentConfig
+import name.lechners.chessomnia.engine.Engine
 import name.lechners.chessomnia.game.ChessGame
 import name.lechners.chessomnia.game.clock.ClockState
+import name.lechners.chessomnia.rules.Fen
 import name.lechners.chessomnia.rules.GameStatus
 import name.lechners.chessomnia.rules.Move
 import name.lechners.chessomnia.rules.Piece
 import name.lechners.chessomnia.rules.PieceType
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.rules.Square
+
+/**
+ * The shortest the device is allowed to take over a move.
+ *
+ * Not a handicap - the search really is that fast on the lower levels. A reply that lands
+ * in the same frame as one's own move reads as a glitch rather than as an opponent, and
+ * leaves no time to watch one's own piece arrive.
+ */
+private const val MIN_THINKING_MS = 350L
 
 sealed interface Selection {
     data object None : Selection
@@ -47,6 +62,10 @@ data class GameUiState(
     /** Pieces captured by White (that is, black ones). */
     val capturedByWhite: List<Piece> = emptyList(),
     val capturedByBlack: List<Piece> = emptyList(),
+    /** The colour the device is playing, or null in a game between two people. */
+    val engineSide: Side? = null,
+    /** The device is searching for its reply. */
+    val thinking: Boolean = false,
 ) {
     val checkedKingSquare: Square?
         get() {
@@ -71,7 +90,8 @@ data class GameUiState(
             capturedByWhite == other.capturedByWhite && capturedByBlack == other.capturedByBlack &&
             lastMove == other.lastMove && canTakeback == other.canTakeback &&
             moveCount == other.moveCount && halfmoveClock == other.halfmoveClock &&
-            showCoordinates == other.showCoordinates
+            showCoordinates == other.showCoordinates &&
+            engineSide == other.engineSide && thinking == other.thinking
     }
 
     override fun hashCode(): Int {
@@ -100,7 +120,30 @@ class GameViewModel(
     private val now: () -> Long = SystemClock::elapsedRealtime,
 ) : ViewModel() {
 
+    /**
+     * The opponent of the game in progress, or null between two people.
+     *
+     * Declared before [game] on purpose: [restoreOrNew] assigns it, and Kotlin
+     * initialises properties in declaration order.
+     */
+    private var opponent: OpponentConfig? = null
+
     private var game: ChessGame = restoreOrNew()
+
+    private var engineJob: Job? = null
+
+    /**
+     * Counts every search that was started or abandoned.
+     *
+     * ⚠️ Cancelling a coroutine is not instant - a search that has already found its move
+     * can still be between the background thread and the main one when the player takes
+     * the move back. Without this counter that stale move would land on the restored
+     * board. Comparing generations is what makes "this answer is no longer wanted"
+     * decidable; every field here is touched only on the main dispatcher.
+     */
+    private var engineGeneration = 0
+
+    private var thinking = false
 
     private val _ui = MutableStateFlow(GameUiState())
     val ui: StateFlow<GameUiState> = _ui.asStateFlow()
@@ -127,6 +170,9 @@ class GameViewModel(
 
     init {
         publish(Selection.None)
+        // A game restored with the device to move has to get going by itself, otherwise
+        // the board just sits there and never answers.
+        maybeStartEngine()
         // A pure redraw tick: the time is computed, not incremented. There is nothing
         // to check - the clock cannot run out.
         viewModelScope.launch {
@@ -183,20 +229,40 @@ class GameViewModel(
 
     fun cancelPromotion() = publish(Selection.None)
 
+    /**
+     * Takes the last move back.
+     *
+     * ⚠️ Against the device that means **more than one halfmove**. Undoing only the
+     * device's reply would hand the board straight back to it and it would answer again;
+     * undoing only one's own move while it is thinking would leave it answering a
+     * position that no longer exists. Both cases are the same rule: keep going until it
+     * is the human's turn again.
+     */
     fun takeback() {
-        game.takeback()
+        cancelEngine()
+        takeBackToHumanTurn(game, opponent?.humanPlays)
         persist()
         publish(Selection.None)
+        // ⚠️ Not always a no-op. Playing Black, taking back the device's opening move
+        // empties the history and leaves it to move again with nothing left to undo -
+        // without this the board would simply freeze. It answers afresh instead, which
+        // is the sensible reading of taking back a move one did not make.
+        maybeStartEngine()
     }
 
     fun startOrResumeClock() {
         game.startClock(now())
         _curtain.value = false
         publishClock()
+        // Covers coming back to a game that was saved with the device to move.
+        maybeStartEngine()
     }
 
     /** Called when the game screen is left - otherwise time would accrue in the menu. */
     fun pauseClock() {
+        // The device does not think on while nobody is watching: its move would switch
+        // the clock back on behind the menu, and the thinking time would be wrong.
+        cancelEngine()
         game.pauseClock(now())
         persist()
         publishClock()
@@ -216,12 +282,28 @@ class GameViewModel(
         _curtain.value = true
     }
 
-    /** A new game - only ever on an explicit request. */
-    fun newGame() {
+    /**
+     * A new game - only ever on an explicit request.
+     *
+     * @param opponent null for two people at one board.
+     */
+    fun newGame(opponent: OpponentConfig?) {
+        cancelEngine()
+        this.opponent = opponent
         game = ChessGame.newGame(prefs.settings.value.clockEnabled)
         persist()
         publish(Selection.None)
+        maybeStartEngine()
     }
+
+    /**
+     * The new-game button inside a game: the same kind of game again.
+     *
+     * Deliberately not the same as the home screen's "new game", which starts a game
+     * between two people. Somebody who is playing the device and asks for a new game
+     * wants another one against the device, not a silent switch of mode.
+     */
+    fun restartGame() = newGame(opponent)
 
     // ── State ───────────────────────────────────────────────────────────────────
 
@@ -229,6 +311,69 @@ class GameViewModel(
         game.apply(move, now())
         persist()
         publish(Selection.None)
+        maybeStartEngine()
+    }
+
+    // ── The opponent ────────────────────────────────────────────────────────────
+
+    /**
+     * Lets the device think, if it is its turn.
+     *
+     * Safe to call more often than necessary - it checks everything itself. That is why
+     * it sits at the end of every path that can make it the device's turn: a move, a new
+     * game, a takeback, and returning to the board (the game may have been saved with the
+     * device to move and the app killed in between).
+     */
+    private fun maybeStartEngine() {
+        val config = opponent ?: return
+        if (game.status.isOver) return
+        if (game.sideToMove != config.enginePlays) return
+        if (engineJob?.isActive == true) return
+
+        val generation = ++engineGeneration
+        // Read on the main thread and handed over as a copy - the game keeps being
+        // edited here while the search runs over there.
+        val fen = game.fen()
+        val repetition = game.repetitionSnapshot()
+        setThinking(true)
+
+        engineJob = viewModelScope.launch {
+            try {
+                val startedAt = now()
+                val move = withContext(Dispatchers.Default) {
+                    Engine(config.level).chooseMove(Fen.parse(fen), repetition) { !isActive }
+                }
+                // The weakest level answers in about a millisecond. A reply that appears
+                // in the same frame as one's own move reads as a glitch rather than as an
+                // opponent, and leaves no time to see one's own piece land.
+                val elapsed = now() - startedAt
+                if (elapsed < MIN_THINKING_MS) delay(MIN_THINKING_MS - elapsed)
+
+                if (generation == engineGeneration && move != null) {
+                    game.apply(move, now())
+                    persist()
+                    publish(Selection.None)
+                }
+            } finally {
+                // Only if no newer search has taken over - otherwise a cancelled one
+                // would switch off the indicator its successor just switched on.
+                if (generation == engineGeneration) setThinking(false)
+            }
+        }
+    }
+
+    /** Abandons a running search and makes sure its answer will be ignored. */
+    private fun cancelEngine() {
+        engineGeneration++
+        engineJob?.cancel()
+        engineJob = null
+        setThinking(false)
+    }
+
+    private fun setThinking(value: Boolean) {
+        if (thinking == value) return
+        thinking = value
+        publish(_ui.value.selection)
     }
 
     private fun publish(selection: Selection) {
@@ -252,6 +397,8 @@ class GameViewModel(
             bottomSide = settings.boardBottomSide,
             capturedByWhite = game.capturedBy(Side.WHITE),
             capturedByBlack = game.capturedBy(Side.BLACK),
+            engineSide = opponent?.enginePlays,
+            thinking = thinking,
         )
         publishClock()
     }
@@ -307,6 +454,7 @@ class GameViewModel(
     private fun persist() {
         val c = game.clock
         val n = now()
+        val (opponentLevel, engineSide) = GameSnapshot.encodeOpponent(opponent)
         prefs.saveGame(
             GameSnapshot(
                 startFen = game.startFen,
@@ -315,12 +463,15 @@ class GameViewModel(
                 whiteElapsedMs = c.elapsed(Side.WHITE, n),
                 blackElapsedMs = c.elapsed(Side.BLACK, n),
                 result = GameSnapshot.encodeResult(game.status),
+                opponentLevel = opponentLevel,
+                engineSide = engineSide,
             )
         )
     }
 
     private fun restoreOrNew(): ChessGame {
         val snap = prefs.loadGame() ?: return ChessGame.newGame(prefs.settings.value.clockEnabled)
+        opponent = GameSnapshot.decodeOpponent(snap.opponentLevel, snap.engineSide)
         val restored = ChessGame.replay(snap.startFen, snap.moves, snap.clockEnabled)
         GameSnapshot.decodeResult(snap.result)?.let { restored.restoreResult(it) }
         // Clock readings from v1 meant REMAINING time and would be badly wrong if read

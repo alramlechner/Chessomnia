@@ -13,6 +13,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import name.lechners.chessomnia.data.OpponentConfig
+import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.ui.about.LicensesScreen
 import name.lechners.chessomnia.ui.game.GameScreen
 import name.lechners.chessomnia.ui.game.GameViewModel
@@ -66,8 +68,25 @@ class MainActivity : ComponentActivity() {
                             versionName = app.appInfo.versionName,
                             hasResumableGame = gameViewModel.hasResumableGame,
                             moveCount = gameState.moveCount,
+                            settings = settings,
                             onResumeGame = { screen = Screen.GAME },
-                            onNewGame = { gameViewModel.newGame(); screen = Screen.GAME },
+                            onNewGame = { gameViewModel.newGame(null); screen = Screen.GAME },
+                            onPlayDevice = { level, humanSide ->
+                                // The person at the table sits at the lower edge, so the
+                                // board is turned to their colour rather than leaving them
+                                // to play upside down.
+                                app.prefs.update {
+                                    it.copy(
+                                        opponentLevel = level,
+                                        opponentHumanPlaysWhite = humanSide == Side.WHITE,
+                                        boardBottomSide = humanSide,
+                                    )
+                                }
+                                gameViewModel.newGame(
+                                    OpponentConfig(level, enginePlays = humanSide.opposite)
+                                )
+                                screen = Screen.GAME
+                            },
                             onSettings = { screen = Screen.SETTINGS },
                             buildBugReport = gameViewModel::buildBugReport,
                             modifier = Modifier.safeDrawingPadding(),

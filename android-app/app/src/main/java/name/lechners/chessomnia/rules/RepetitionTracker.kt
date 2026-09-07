@@ -27,6 +27,19 @@ class RepetitionTracker {
 
     fun count(key: String): Int = counts[key] ?: 0
 
+    /**
+     * An independent copy.
+     *
+     * The engine reads the repetition history on a background thread while the game goes
+     * on being edited on the main one. Handing over the live object would be a data race
+     * for the sake of a few dozen strings.
+     */
+    fun snapshot(): RepetitionTracker {
+        val copy = RepetitionTracker()
+        for (key in stack) copy.push(key)
+        return copy
+    }
+
     fun currentCount(): Int = if (stack.isEmpty()) 0 else count(stack[stack.size - 1])
 
     fun clear() { counts.clear(); stack.clear() }

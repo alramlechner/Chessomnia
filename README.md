@@ -4,15 +4,21 @@
 
 # Chessomnia
 
-**A chess board for two people sharing one device. Not a chess computer.**
+**A chess board for the table you are sitting at.**
 
 Chessomnia replaces the physical board when you don't have one to hand. Two players
 sit opposite each other, the tablet — or phone — lies flat on the table between them,
 and they play the way they would on wood and felt, except that the app knows the rules.
 
-There is **no computer opponent, no position evaluation and no move suggestion**. That is
-a deliberate product decision, not a missing feature. The app knows the rules; it does
-not know strategy.
+There is **no evaluation bar and no move suggestion**, and there never will be. That is a
+deliberate product decision, not a missing feature: the app shows you the rules, not an
+opinion about who is winning.
+
+When nobody else is around, the board plays: **Play against the device**, three strengths,
+your choice of colour. The top strength is deliberately a good club amateur rather than as
+strong as it could be — an opponent nobody can beat is not a feature. The engine is
+written for this app, runs entirely on the device, and adds no permission and no
+dependency; see [ARCHITECTURE.md](ARCHITECTURE.md).
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android%2011%2B-green.svg)](#building)
@@ -36,6 +42,8 @@ More in <a href="store/screenshots">store/screenshots</a>.</em></p>
   fifty-move rule, threefold repetition and dead positions.
 - **Learning aid** — tap a piece and every legal move for it is marked, including the
   special moves beginners overlook.
+- **An optional opponent** — three strengths, your choice of colour, entirely on the
+  device. Taking a move back against it undoes both halfmoves, so it is your turn again.
 - **Two-sided layout** — clock, status line and buttons exist twice, once at each table
   edge. The upper player's panel and pieces are drawn rotated 180°, so both players read
   their own material the right way up.
@@ -49,7 +57,8 @@ More in <a href="store/screenshots">store/screenshots</a>.</em></p>
 
 ### What it deliberately does not do
 
-No engine. No move list or SAN notation. No PGN export. No opening book. No online play.
+No evaluation bar or move hints. No move list or SAN notation. No PGN export. No online
+play. No accounts, no advertising.
 
 ## Why you might want it
 
@@ -57,8 +66,8 @@ No engine. No move list or SAN notation. No PGN export. No opening book. No onli
   no account. Nothing is uploaded, ever.
 - **Fully offline.** The release build requests **zero Android permissions** — not even
   `INTERNET`. You can verify that yourself in [`AndroidManifest.xml`](android-app/app/src/main/AndroidManifest.xml).
-- **Not a chess computer.** No opponent, no evaluation bar. That is a deliberate
-  decision, not a missing feature.
+- **Not an analysis tool.** No evaluation bar, no best-move hints — and when the optional
+  opponent lands, it will play its move and say nothing about yours.
 
 ## Privacy
 
@@ -148,6 +157,7 @@ succeeds but is wrong, and the Play Console steps — is written up in
 ```
 android-app/app/src/main/java/name/lechners/chessomnia/
 ├── rules/       Rule engine. Pure Kotlin, no Android imports, fully unit-testable
+├── engine/      The optional opponent. Pure Kotlin too, and built on rules/ unchanged
 ├── game/        A game in progress: move history, takeback, clock
 ├── data/        Settings, persistence, bug report
 └── ui/          Compose: board, panels, overlays, screens
@@ -181,5 +191,6 @@ OFL, a document set with a font is not itself subject to the OFL.
 Bug reports are especially welcome — the in-app *Report a problem* button produces exactly
 the text needed to reproduce a position. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Please note the scope: pull requests that add an engine, an evaluation or move suggestions
-will be declined, however well written. That boundary is the product.
+Please note the scope: pull requests that add an evaluation display, move suggestions or
+online play will be declined, however well written — as will ones that make the opponent
+stronger. That boundary is the product.
