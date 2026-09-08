@@ -14,9 +14,11 @@ There is **no evaluation bar and no move suggestion**, and there never will be. 
 deliberate product decision, not a missing feature: the app shows you the rules, not an
 opinion about who is winning.
 
-When nobody else is around, the board plays: **Play against the device**, three strengths,
+When nobody else is around, the board plays: **Play against the device**, four strengths,
 your choice of colour. The top strength is deliberately a good club amateur rather than as
-strong as it could be — an opponent nobody can beat is not a feature. The engine is
+strong as it could be — an opponent nobody can beat is not a feature. The bottom one is
+meant for a child of nine: it keeps its own position together and walks past most of what
+you leave hanging, instead of quietly collecting every piece you overlook. The engine is
 written for this app, runs entirely on the device, and adds no permission and no
 dependency; see [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -42,8 +44,9 @@ More in <a href="store/screenshots">store/screenshots</a>.</em></p>
   fifty-move rule, threefold repetition and dead positions.
 - **Learning aid** — tap a piece and every legal move for it is marked, including the
   special moves beginners overlook.
-- **An optional opponent** — three strengths, your choice of colour, entirely on the
-  device. Taking a move back against it undoes both halfmoves, so it is your turn again.
+- **An optional opponent** — four strengths, from one a nine-year-old can beat to a good
+  club amateur, your choice of colour, entirely on the device. Taking a move back against
+  it undoes both halfmoves, so it is your turn again.
 - **Two-sided layout** — clock, status line and buttons exist twice, once at each table
   edge. The upper player's panel and pieces are drawn rotated 180°, so both players read
   their own material the right way up.

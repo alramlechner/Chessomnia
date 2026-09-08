@@ -8,7 +8,7 @@ uses [Semantic Versioning](https://semver.org/).
 
 ### Added
 - **An optional opponent.** The home screen now offers the choice directly:
-  *Two players* or *Play the device*, the latter with three strengths and a choice
+  *Two players* or *Play the device*, the latter with four strengths and a choice
   of colour. The board turns to your colour, and the device's panel is not rotated
   — nobody is sitting at that edge.
 
@@ -27,6 +27,15 @@ uses [Semantic Versioning](https://semver.org/).
   forced mate is always played, and a bare-king endgame is converted at full
   strength. Being handed a draw because the opponent could not finish would read
   as a broken app, not a weak one.
+
+  The weakest strength, *Learning the moves*, is for a child of nine to eleven.
+  It is not simply a smaller tolerance: a window around the best move can never
+  go below a certain strength, because a free queen is worth nine pawns more than
+  every alternative and no tolerance ever reaches the second move. That level
+  measures its tolerance from the position it is standing in instead, so taking
+  the queen is merely one of thirty moves that do not make its own position
+  worse — it walks past most of what is left hanging, while still not handing
+  over a piece itself.
 
   Taking a move back against the device undoes both halfmoves, so it is your turn
   again. The opponent is stored with the game, so a restart does not silently

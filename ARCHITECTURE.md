@@ -20,7 +20,7 @@ including the special moves — castling, en passant, promotion — that beginne
 | Setup | **The tablet lies flat on the table and the players sit opposite each other** — as at a real board |
 | Board orientation | **Fixed, White always at the bottom.** No auto-rotation, no flip flag |
 | Learning aids | Mark legal moves · check/mate/stalemate · take back a move |
-| Opponent | Optional. Three strengths, the top one a good club amateur — **not** as strong as it could be |
+| Opponent | Optional. Four strengths, the top one a good club amateur — **not** as strong as it could be, the bottom one beatable by a nine-year-old |
 | Deliberately absent | Move list / SAN notation, PGN export, any form of engine *analysis* shown to the player |
 | Clock | **Counts upward, never expires.** Fully switchable |
 | Pieces | Classic Staunton as VectorDrawables |
@@ -225,6 +225,44 @@ Two situations override the window entirely:
   mating gradient, and a beginner should lose to a mate — being handed a draw because the
   opponent could not finish reads as a broken app, not a weak one.
 
+  ⚠️ "Full strength" has to mean the **depth** as well, not only the move choice. Until
+  this was fixed, `BEGINNER` drew king and queen against a bare king *every single time*:
+  at depth two it followed the mating gradient, ran out of sight one move before the net
+  closed and shuffled the queen until the position repeated. `Engine` therefore searches
+  a bare-king ending to at least `MATING_DEPTH` (four) whatever the level says. The
+  ending is nearly branchless, so the extra plies cost a few milliseconds. A difficulty
+  setting has no business deciding whether the app can finish a game it has already won.
+
+### What a window around the best move cannot do
+
+⚠️ A window around *the best move* has a floor below which it cannot go, however wide it
+is opened, and that floor was still far too strong for a nine-year-old. A free queen is
+worth nine pawns more than every alternative, so no tolerance ever reaches the second
+move: `BEGINNER` took the hanging queen in **100 %** of tries. A child leaves a piece
+hanging several times a game, so the opponent never had to play well — it only had to
+accept the presents, and it won every game by a distance.
+
+`Level.LEARNING` therefore measures the same tolerance from a different reference: not
+from the best move found, but from the **standing evaluation** — what the position is
+worth before anybody does anything clever. The consequence is exactly the one wanted:
+
+- The free queen no longer stands out. Taking it is one of thirty moves that do not make
+  the engine's own position worse, so it is picked about as often as any other: **3 %** of
+  tries in the same position where `BEGINNER` is at 100 %.
+- Handing over a piece is still excluded, because *that* does make its position worse.
+  The window is 250 cp: it will let a pawn go and will trade a knight for a pawn, but a
+  rook for nothing is out of reach of the dice. Careless, not suicidal.
+
+`minOf(best, standing)` is the reference, and the minimum is load-bearing. When every move
+is bad — a trapped queen, a threat that must be answered — the standing evaluation sits
+above all of them and would leave no candidate at all; falling back to the best score
+there means the engine still defends as well as it can see.
+
+Measured over whole games against a deliberately blundering opponent, `BEGINNER` finishes
+about **20 pawns** ahead and mates every game; `LEARNING` finishes roughly level on
+material. `GamePlayTest.theWeakestLevelIsMateriallyWeakerThanTheNextOneUp` is what keeps
+it that way — a level that merely *said* it was weaker would be worth nothing.
+
 ### The clock is a ceiling, not a promise
 
 The first iteration ignores the time budget. However slow the device, a search that has
@@ -238,7 +276,8 @@ On a Raspberry Pi 5 — comparable to a mid-range tablet — after JIT warm-up, 
 
 | Level | Opening | Middlegame (Kiwipete) | Endgame |
 |---|---|---|---|
-| `BEGINNER` | depth 2, 1 ms | depth 2, 180 ms | depth 2, 1 ms |
+| `LEARNING` | depth 2, 1 ms | depth 1, 200 ms | depth 2, 1 ms |
+| `BEGINNER` | depth 2, 1 ms | depth 1, 200 ms | depth 2, 1 ms |
 | `CASUAL` | depth 4, 20 ms | depth 2, 500 ms | depth 4, 23 ms |
 | `CLUB` | depth 6, 666 ms | depth 4, 1200 ms | depth 6, 454 ms |
 

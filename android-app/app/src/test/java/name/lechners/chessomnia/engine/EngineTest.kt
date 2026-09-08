@@ -6,6 +6,7 @@ import name.lechners.chessomnia.rules.GameStatus
 import name.lechners.chessomnia.rules.LongAlgebraic
 import name.lechners.chessomnia.rules.MoveGenerator
 import name.lechners.chessomnia.rules.RepetitionTracker
+import name.lechners.chessomnia.rules.Side
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -66,6 +67,79 @@ class EngineTest {
         val fen = "4k3/8/8/8/7q/8/8/R3K2R w KQ - 0 1"
         val move = engine(Level.CASUAL).chooseMove(Fen.parse(fen))
         assertEquals("h1h4", LongAlgebraic.of(move!!))
+    }
+
+    /**
+     * The point of the weakest level, stated as a test.
+     *
+     * The other three take the queen every time, and that is exactly what made them
+     * unplayable for a nine-year-old: a child leaves a piece hanging several times a
+     * game, and an opponent that simply accepts the presents wins without ever having to
+     * play well. [Level.LEARNING] measures its tolerance from the position it is already
+     * standing in rather than from the best move it found, so a free queen no longer
+     * stands out - it is one of many moves that do not make its own position worse.
+     *
+     * Both halves matter. Without the second assertion the level could be weak by being
+     * random, which is a different and worse thing.
+     */
+    @Test
+    fun theWeakestLevelUsuallyWalksPastAFreeQueen() {
+        // Black's queen on g4 is simply hanging to Qxg4, with 27 legal moves to choose
+        // from - an ordinary opening blunder rather than a forced endgame.
+        val fen = "rnb1kbnr/pppp1ppp/8/4p3/6q1/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 1"
+        val tries = 60
+
+        fun grabs(level: Level, seed: Int): Boolean {
+            val move = Engine(level, Random(seed)).chooseMove(Fen.parse(fen))!!
+            return LongAlgebraic.of(move) == "d1g4"
+        }
+
+        var learning = 0
+        var beginner = 0
+        for (seed in 1..tries) {
+            if (grabs(Level.LEARNING, seed)) learning++
+            if (grabs(Level.BEGINNER, seed)) beginner++
+        }
+        assertTrue(
+            "the weakest level took the queen $learning times out of $tries",
+            learning < tries / 5,
+        )
+        assertEquals("BEGINNER is supposed to take it every time", tries, beginner)
+    }
+
+    /**
+     * Careless, not suicidal. The tolerance is measured downwards from where the engine
+     * already stands, so it may drift - a pawn here, a knight for a pawn there - but a
+     * move that hands over a whole rook for nothing is further down than the tolerance
+     * reaches, and stays out of the draw whatever the seed.
+     *
+     * Black's pawn on c5 attacks the rook on d4 and nothing defends it. Leaving it there
+     * costs a rook for a pawn; every seed has to see that much.
+     */
+    @Test
+    fun theWeakestLevelStillDoesNotHandOverARook() {
+        val fen = "4k3/8/8/2p5/3R4/8/8/4K3 w - - 0 1"
+        for (seed in 1..30) {
+            val move = Engine(Level.LEARNING, Random(seed)).chooseMove(Fen.parse(fen))!!
+            val game = ChessGame.replay(fen, listOf(LongAlgebraic.of(move)), clockEnabled = false)
+            val reply = Engine(Level.CLUB, Random(seed)).chooseMove(Fen.parse(game.fen()))
+            if (reply != null) game.apply(reply)
+            assertTrue(
+                "seed $seed played ${LongAlgebraic.of(move)} and lost the rook",
+                materialOf(game.fen()) > 0,
+            )
+        }
+    }
+
+    /** White's material minus Black's, kings excluded. */
+    private fun materialOf(fen: String): Int {
+        var sum = 0
+        for (piece in Fen.parse(fen).board) {
+            if (piece == null) continue
+            val value = Evaluation.valueOf(piece.type)
+            sum += if (piece.side == Side.WHITE) value else -value
+        }
+        return sum
     }
 
     /**

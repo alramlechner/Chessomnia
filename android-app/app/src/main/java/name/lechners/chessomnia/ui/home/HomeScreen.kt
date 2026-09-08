@@ -257,6 +257,7 @@ private fun OpponentDialog(
 
 @StringRes
 private fun levelNameRes(level: Level): Int = when (level) {
+    Level.LEARNING -> R.string.opponent_level_learning
     Level.BEGINNER -> R.string.opponent_level_beginner
     Level.CASUAL -> R.string.opponent_level_casual
     Level.CLUB -> R.string.opponent_level_club

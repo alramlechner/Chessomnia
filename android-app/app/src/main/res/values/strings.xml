@@ -110,6 +110,7 @@
     <string name="home_play_device">Play the device</string>
     <string name="opponent_dialog_title">Play against the device</string>
     <string name="opponent_strength">Strength</string>
+    <string name="opponent_level_learning">Learning the moves</string>
     <string name="opponent_level_beginner">Beginner</string>
     <string name="opponent_level_casual">Casual</string>
     <string name="opponent_level_club">Club player</string>

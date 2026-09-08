@@ -103,6 +103,7 @@
     <string name="home_play_device">Gegen das Gerät</string>
     <string name="opponent_dialog_title">Gegen das Gerät spielen</string>
     <string name="opponent_strength">Stärke</string>
+    <string name="opponent_level_learning">Lernt die Züge</string>
     <string name="opponent_level_beginner">Anfänger</string>
     <string name="opponent_level_casual">Fortgeschritten</string>
     <string name="opponent_level_club">Vereinsspieler</string>
