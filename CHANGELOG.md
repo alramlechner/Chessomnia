@@ -42,6 +42,16 @@ uses [Semantic Versioning](https://semver.org/).
   turn it back into a two-player game.
 
 ### Changed
+- **The store listing and README now describe the app that exists.** Both still
+  led with "it is NOT a chess computer — there is no engine, no opponent to play
+  against", which was true when it was written and became exactly wrong when the
+  opponent shipped. The positioning is now the four things that actually
+  distinguish it: free, ad-free, registration-free and no tracking.
+
+  What did not change is the line that used to sit beside it. There is still no
+  evaluation bar and no move suggestion; the opponent plays and says nothing
+  about your position. Those were always two separate decisions and only one of
+  them was reversed.
 - **The piece-square tables are now generated from stated chess principles**
   (`tools/generate_pst.py`) instead of being hand-tuned numbers. Nothing about
   how the app plays was meant to change; the tolerance of the weakest strength
@@ -82,7 +92,9 @@ uses [Semantic Versioning](https://semver.org/).
   ⚠️ The Play Store listings under `store/` and the project page in `docs/` still
   say "not a chess computer". They are deliberately left for whoever publishes the
   release, so that the repository does not describe the app differently from what
-  is live in the store.
+  is live in the store. *(Both were rewritten later in this same unreleased
+  batch — see "The store listing and README now describe the app that exists"
+  above. Nothing has been published from either state yet.)*
 - Starting a new game from the player panel no longer asks for confirmation when
   no game is in progress — that is, once the current one is decided, or before
   anyone has moved. The question was worth asking mid-game and misleading

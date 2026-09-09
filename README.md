@@ -10,9 +10,15 @@ Chessomnia replaces the physical board when you don't have one to hand. Two play
 sit opposite each other, the tablet — or phone — lies flat on the table between them,
 and they play the way they would on wood and felt, except that the app knows the rules.
 
-There is **no evaluation bar and no move suggestion**, and there never will be. That is a
-deliberate product decision, not a missing feature: the app shows you the rules, not an
-opinion about who is winning.
+**Free, ad-free, registration-free, and it tracks nothing.** Those four are the point.
+Free means free — no trial, no lite version, nothing to unlock, no in-app purchase. There
+is no account and no sign-up: you install it and you play. And the last one is not a
+promise but a property — the release build holds no Android permission that grants it
+anything — `INTERNET` above all — so it *cannot* send anything anywhere.
+
+There is also **no evaluation bar and no move suggestion**, and there never will be. That
+is a separate decision, and a deliberate one: the app shows you the rules, not an opinion
+about who is winning.
 
 When nobody else is around, the board plays: **Play against the device**, four strengths,
 your choice of colour. The top strength is deliberately a good club amateur rather than as
@@ -61,16 +67,21 @@ More in <a href="store/screenshots">store/screenshots</a>.</em></p>
 ### What it deliberately does not do
 
 No evaluation bar or move hints. No move list or SAN notation. No PGN export. No online
-play. No accounts, no advertising.
+play. No account, no advertising, no analytics.
 
 ## Why you might want it
 
-- **Free, ad-free, tracking-free.** No advertising SDK, no analytics, no crash reporting,
-  no account. Nothing is uploaded, ever.
-- **Fully offline.** The release build requests **zero Android permissions** — not even
-  `INTERNET`. You can verify that yourself in [`AndroidManifest.xml`](android-app/app/src/main/AndroidManifest.xml).
-- **Not an analysis tool.** No evaluation bar, no best-move hints — and when the optional
-  opponent lands, it will play its move and say nothing about yours.
+- **Free.** Not a trial, not a lite version. Nothing to unlock, no in-app purchases.
+- **Ad-free.** No advertising SDK, no analytics, no crash reporting.
+- **Registration-free.** No account, no sign-up, no email address. Install and play.
+- **No tracking — as a property, not a promise.** The release build holds **no Android
+  permission that grants it anything**, `INTERNET` above all, so it is incapable of
+  sending anything anywhere. The source manifest declares none at all
+  ([`AndroidManifest.xml`](android-app/app/src/main/AndroidManifest.xml)); the merged
+  one carries a single line, `…DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION`, which AndroidX
+  declares for the app about itself so it can register a receiver as not-exported.
+- **Not an analysis tool.** No evaluation bar and no best-move hints. The opponent plays
+  its move and says nothing about yours.
 
 ## Privacy
 

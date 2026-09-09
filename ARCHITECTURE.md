@@ -17,6 +17,7 @@ including the special moves — castling, en passant, promotion — that beginne
 
 | Point | Decision |
 |---|---|
+| What the app promises | **Free · ad-free · registration-free · no tracking.** The four load-bearing ones — see below |
 | Setup | **The tablet lies flat on the table and the players sit opposite each other** — as at a real board |
 | Board orientation | **Fixed, White always at the bottom.** No auto-rotation, no flip flag |
 | Learning aids | Mark legal moves · check/mate/stalemate · take back a move |
@@ -25,6 +26,34 @@ including the special moves — castling, en passant, promotion — that beginne
 | Clock | **Counts upward, never expires.** Fully switchable |
 | Pieces | Classic Staunton as VectorDrawables |
 | Extras | Start a new game from the board · the game survives an app restart · hints and takebacks switchable · the screen stays on |
+
+### The four promises, and which one is structural
+
+Free, ad-free, registration-free and untracked are what the store copy leads with, so they
+have to survive every future change rather than be re-argued each time. Three of them are
+kept by simply not adding something: no billing, no ad SDK, no account.
+
+⚠️ The fourth is different in kind, and it is the one to protect. **"No tracking" is not a
+policy here, it is a property of the manifest:** the release build requests no Android
+permission that grants it any capability — no `INTERNET` above all — so the app is
+*incapable* of sending anything anywhere, whatever any future code might try. That is
+worth far more than a promise, and it is also fragile: a single dependency that declares
+`INTERNET` in its own manifest would merge it in and quietly turn a property back into a
+promise. `RELEASING.md` step 4 greps the merged manifest for exactly this reason, and it
+is not an optional step.
+
+The engine matters here too. An opponent is the obvious thing to have called out to a
+server, and it deliberately is not: the search runs on the device, adds no dependency and
+no permission, which is why adding it did not cost any of the four.
+
+### An opponent, but not an analysis tool
+
+"No computer opponent" used to be part of how the app described itself. That is no longer
+true and no longer the positioning — a chess computer is a fine thing for a board to have
+when nobody else is at the table. What did *not* change is the line next to it: no
+evaluation bar, no best-move hint, no opening explorer. The opponent plays its move and
+says nothing about the human's position. Those were always two separate decisions; only
+one of them was reversed.
 
 ### What the setup means for the layout
 

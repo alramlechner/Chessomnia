@@ -9,32 +9,30 @@ Chessomnia
 ## Short description (80 characters max)
 
 ```
-A chess board for two players. No engine, no ads, no tracking. Fully offline.
+Chess for two, or against the device. Free, no ads, no account, no tracking.
 ```
-
-*(77 characters — the limit is 80.)*
 
 ## Full description (4000 characters max)
 
 ```
-Chessomnia turns your tablet or phone into a chess board. Two players, one device, sitting opposite each other — exactly as you would at a real board.
-
-It is NOT a chess computer. There is no engine, no opponent to play against, no evaluation bar and no move suggestions. Chessomnia knows the rules, not strategy. That is a deliberate decision, not a missing feature.
+Chessomnia turns your tablet or phone into a chess board. Two players, one device, sitting opposite each other — exactly as you would at a real board. And when nobody else is around, the board plays: four strengths, from one a nine-year-old can beat to a good club amateur.
 
 
-FREE, AD-FREE, TRACKING-FREE
+FREE. NO ADS. NO ACCOUNT. NO TRACKING.
 
-No advertising. No analytics. No account. No in-app purchases. Nothing to unlock.
+Those four are the point, and none of them has an asterisk.
 
-The app holds no Android permission that grants it anything — not even internet access — so it is technically incapable of sending anything anywhere. Your games never leave your device. You can verify that yourself: Chessomnia is open source.
+Free means free — not a trial, not a lite version, nothing to unlock, no in-app purchases. No advertising and no analytics. No account, no sign-up, no email address: you install it and you play.
+
+And the tracking claim is not a promise, it is a property. The app holds no Android permission that grants it anything — not even internet access — so it is technically incapable of sending anything anywhere. Your games never leave your device. You can verify that yourself: Chessomnia is open source.
 
 
 WORKS COMPLETELY OFFLINE
 
-There is nothing to connect to. On a plane, in a cellar, in a tent — it makes no difference. The app has no server side at all.
+Nothing to connect to. On a plane, in a cellar, in a tent — no difference. The app has no server side at all, and the opponent runs on your device rather than somewhere else.
 
 
-NOT A CHESS COMPUTER — A REPLACEMENT FOR THE BOARD
+A REPLACEMENT FOR THE BOARD
 
 The point is the two people at the table. Chessomnia takes over exactly the jobs a wooden board cannot do:
 
@@ -43,21 +41,28 @@ The point is the two people at the table. Chessomnia takes over exactly the jobs
 • It keeps the pieces where you put them when the device goes to sleep.
 
 
+AN OPPONENT WHEN NOBODY ELSE IS AROUND
+
+Play the device instead of a person, in the colour of your choice. Four strengths: the weakest is meant for a child of nine to eleven — it keeps its own position together but walks past most of what you leave hanging — and the strongest is a good club amateur, deliberately not as strong as it could be. An opponent nobody can beat is not a feature.
+
+Take a move back against it and it is your turn again, not its.
+
+
 A LEARNING AID, NOT A TEACHER
 
 Tap a piece and every square it may legally move to is marked — with castling and en passant highlighted separately, because those are the moves beginners overlook. Switch the hints off once you no longer need them.
 
-What you will never get is a suggestion of which move to play. Working that out is the game.
+What you will never get is a suggestion of which move to play, or a bar telling you who is winning. The opponent makes its move and says nothing about your position. Working that out is the game.
 
 
 BUILT FOR A DEVICE LYING FLAT ON THE TABLE
 
-A tablet suits it best. A phone works just as well — the board is smaller, nothing else changes.
+A tablet suits it best. A phone works just as well: the board is smaller, nothing else changes.
 
 Everything follows from that one idea:
 
 • Clock, status and buttons exist twice, once at each player's edge, so neither of you is reading upside down.
-• The pieces of the player sitting opposite are drawn rotated, just as the three-dimensional shape of a real piece does the job at a wooden board.
+• The pieces of the player opposite are drawn rotated — the job a real piece's shape does at a wooden board.
 • "Turn the board" rotates it in place, instead of somebody having to pick the device up.
 • Prompts and the promotion dialog turn to face whoever triggered them.
 • When a game ends, nothing covers the board. After a mate you want to see why — the highlighted king and the marked last move are the answer.
@@ -89,7 +94,7 @@ https://github.com/alramlechner/Chessomnia
 |---|---|
 | App or game | Game |
 | Category | Board |
-| Tags | Chess, Board game, Two player |
+| Tags | Chess, Board game, Two player, Single player |
 | Contains ads | No |
 | In-app purchases | No |
 | Target audience | 13+ (avoids the additional Families-programme requirements; the app has no content concerns at any age) |
