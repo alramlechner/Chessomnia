@@ -41,6 +41,21 @@ uses [Semantic Versioning](https://semver.org/).
   again. The opponent is stored with the game, so a restart does not silently
   turn it back into a two-player game.
 
+### Changed
+- **The piece-square tables are now generated from stated chess principles**
+  (`tools/generate_pst.py`) instead of being hand-tuned numbers. Nothing about
+  how the app plays was meant to change; the tolerance of the weakest strength
+  was re-measured against the new scale and is now stated as what it always
+  meant — one minor piece.
+
+  The reason is provenance. The tables that had been in the file were derived
+  from the best-known published set by rescaling it, closely enough that the
+  queen table matched cell for cell under a single substitution, and that set
+  is published under a share-alike licence this Apache-2.0 project cannot
+  satisfy. Generated tables have a history that can be re-run and checked
+  rather than asserted. `NOTICE` records what the situation was and why what
+  remains — the five standard piece values — is fine.
+
 ### Fixed
 - **The king was invisible on the home screen in the light theme.** The mark is
   generated from the same source as the launcher icon and had inherited its

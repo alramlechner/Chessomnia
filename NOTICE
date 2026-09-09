@@ -26,6 +26,44 @@ Bibliotheken
     stehen unter der Apache License 2.0.
     Volltext: licenses/Apache-2.0.txt
 
+Schachprogrammier-Verfahren (app/src/main/java/.../engine/)
+    Die Engine verwendet ausschliesslich veroeffentlichte Standardverfahren:
+    Alpha-Beta (Knuth/Moore 1975), Iterative Deepening (Slate/Atkin 1977),
+    Quiescence Search (Shannon 1950), MVV-LVA, Killer Moves und die History
+    Heuristic (Schaeffer 1983), dazu ein 0x88-Brett. Verfahren und Algorithmen
+    als solche sind nicht geschuetzt (Art. 1 Abs. 2 der Richtlinie 2009/24/EG;
+    17 U.S.C. 102(b)); der Kotlin-Code, der sie umsetzt, ist eigenstaendig
+    geschrieben und steht unter Apache-2.0 wie der Rest des Projekts.
+    Vieles davon ist im Chess Programming Wiki nachzulesen
+    (https://www.chessprogramming.org, Inhalte unter CC BY-SA 3.0). Aus dem
+    Wiki wurde gelernt, aber kein Text und kein Code uebernommen -- daraus
+    entsteht keine Lizenzpflicht.
+
+Figurenwerte (Evaluation.PAWN .. Evaluation.QUEEN)
+    100 / 320 / 330 / 500 / 900 -- der Satz aus Tomasz Michniewskis
+    "Simplified Evaluation Function" (Chess Programming Wiki, CC BY-SA 3.0),
+    der praktisch von jeder Engine und jedem Lehrbuch verwendet wird. Fuenf
+    kurze Zahlen, die die Spielregeln vorgeben und nicht die Ausdrucksform
+    eines Autors: kein Werk im Sinne des Urheberrechts, sondern die
+    Groessenordnung, auf die sich das Spiel seit Jahrhunderten geeinigt hat
+    (1/3/3/5/9). Genannt wird die Quelle hier trotzdem.
+
+Piece-Square-Tables (Evaluation.PAWN_MG .. Evaluation.KING_EG)
+    Erzeugt von tools/generate_pst.py aus dort niedergeschriebenen
+    Schachprinzipien -- Springermobilitaet, Bauerndistanz zur Umwandlung,
+    Koenigsdistanz zum Zentrum. Nachpruefbar mit
+    `python3 tools/generate_pst.py --check`.
+
+    ⚠️ Bis einschliesslich Version 1.3.0 waren diese Tabellen aus derselben
+    "Simplified Evaluation Function" abgeleitet: dieselbe Form, umskalierte
+    Werte, bei der Dame sogar Feld fuer Feld deckungsgleich unter einer
+    einzigen Wertersetzung. Ob eine Abstimmungstabelle ueberhaupt schutzfaehig
+    ist, ist zweifelhaft -- sie ist funktionaler Parameter, keine
+    Ausdrucksform. Die Share-alike-Bedingung von CC BY-SA 3.0 laesst sich mit
+    Apache-2.0 aber nicht erfuellen, und die Frage gar nicht erst zu haben ist
+    billiger, als sie zu gewinnen. Der Hinweis bleibt hier stehen, weil die
+    alten Tabellen in der Git-Historie liegen und das erklaert gehoert.
+
 Referenzkorpus (app/src/test/resources/reference_positions.txt)
     Erzeugt mit python-chess (GPL-3.0-or-later). Der Korpus enthaelt reine
     Schach-Faktenlage (Stellungen und legale Zuege), ist kein abgeleitetes

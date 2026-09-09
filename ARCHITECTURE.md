@@ -197,9 +197,29 @@ Two consequences of that choice, both deliberate:
 ### Evaluation
 
 Material, piece-square tables blended between a middlegame and an endgame set, pawn
-structure (doubled, isolated, passed), the bishop pair, and rooks on open files. The
-tables are written for this app rather than taken from anywhere; they encode the handful
-of principles a beginner is taught and nothing more.
+structure (doubled, isolated, passed), the bishop pair, and rooks on open files. They
+encode the handful of principles a beginner is taught and nothing more.
+
+⚠️ **The piece-square tables are generated, not hand-tuned.** `tools/generate_pst.py`
+derives every one of them from a principle written down in that file — a knight's actual
+mobility on an empty board, a pawn's distance from promotion, a king's distance from the
+centre — and `--check` verifies that what stands in `Evaluation.kt` still matches the
+derivation. Do not edit the numbers by hand.
+
+The reason is licensing as much as tidiness, and it is worth stating plainly because an
+earlier version of this file claimed the opposite. Piece-square tables are the
+most-copied artefact in computer chess, and the tables that shipped up to version 1.3.0
+*were* derived from the best-known set — Michniewski's *Simplified Evaluation Function* —
+by rescaling it. The queen table gave it away: it matched cell for cell under a single
+value substitution, reproducing even the two asymmetries generally taken for typos in the
+original. That set is published on a CC BY-SA 3.0 wiki, and share-alike is not something
+an Apache-2.0 project can satisfy. Generating the tables removes the question rather than
+arguing it; see NOTICE for what remains and why it is fine.
+
+The piece values (100 / 320 / 330 / 500 / 900) are deliberately **not** regenerated. They
+are the standard set every engine and every textbook uses, they are five short numbers
+dictated by the game rather than by anyone's expression, and changing them for the sake of
+appearances would make the engine worse for no gain.
 
 ⚠️ **The bare-king term is load-bearing.** Once one side is down to a lone king, material
 and tables say the same thing about every move, and nothing points anywhere. Without a
@@ -250,18 +270,24 @@ worth before anybody does anything clever. The consequence is exactly the one wa
   the engine's own position worse, so it is picked about as often as any other: **3 %** of
   tries in the same position where `BEGINNER` is at 100 %.
 - Handing over a piece is still excluded, because *that* does make its position worse.
-  The window is 250 cp: it will let a pawn go and will trade a knight for a pawn, but a
-  rook for nothing is out of reach of the dice. Careless, not suicidal.
+  The window is one minor piece (`Evaluation.KNIGHT`, 320 cp), written as that rather
+  than as a number: it will let a pawn go, trade a knight for a pawn and now and then
+  drop a knight, but a rook for nothing is out of reach of the dice. Careless, not
+  suicidal.
 
 `minOf(best, standing)` is the reference, and the minimum is load-bearing. When every move
 is bad — a trapped queen, a threat that must be answered — the standing evaluation sits
 above all of them and would leave no candidate at all; falling back to the best score
 there means the engine still defends as well as it can see.
 
-Measured over whole games against a deliberately blundering opponent, `BEGINNER` finishes
-about **20 pawns** ahead and mates every game; `LEARNING` finishes roughly level on
-material. `GamePlayTest.theWeakestLevelIsMateriallyWeakerThanTheNextOneUp` is what keeps
-it that way — a level that merely *said* it was weaker would be worth nothing.
+Measured over twelve games against a deliberately blundering stand-in opponent,
+`BEGINNER` finishes about **15 pawns** ahead, mates all twelve and is never mated;
+`LEARNING` finishes about **4 pawns** ahead, mates seven and is mated twice. The
+stand-in is a crude model of a child rather than a child, so those figures calibrate
+rather than prove. What is asserted in the suite is the relative claim:
+`GamePlayTest.theWeakestLevelIsMateriallyWeakerThanTheNextOneUp` plays the two levels
+against each other, because a level that merely *said* it was weaker would be worth
+nothing.
 
 ### The clock is a ceiling, not a promise
 

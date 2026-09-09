@@ -46,16 +46,18 @@ enum class Level(
      * For a child who has just learned how the pieces move. It keeps its own position
      * together and overlooks nearly everything the other side leaves hanging.
      *
-     * 250 cp is the tolerance that lets a pawn go and trades a knight for a pawn, while
-     * a rook for nothing - 500 - stays out of reach of the dice. There is deliberately
-     * no cap on the number of candidates: with the reference at the standing evaluation
-     * the tolerance alone is the whole mechanism, and a cap would quietly turn it back
-     * into "play one of the best few moves", which is a much stronger opponent.
+     * The tolerance is one minor piece, stated as such rather than as a number: it will
+     * let a pawn go, trade a knight for a pawn and now and then drop a knight, while a
+     * rook for nothing - 500 - stays out of reach of the dice whatever it rolls. There
+     * is deliberately no cap on the number of candidates: with the reference at the
+     * standing evaluation the tolerance alone is the whole mechanism, and a cap would
+     * quietly turn it back into "play one of the best few moves", which is a much
+     * stronger opponent.
      */
     LEARNING(
         maxDepth = 2,
         budgetMs = 200,
-        windowCp = 250,
+        windowCp = Evaluation.KNIGHT,
         maxCandidates = Int.MAX_VALUE,
         takesWhatIsOffered = false,
     ),

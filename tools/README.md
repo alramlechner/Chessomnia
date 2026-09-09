@@ -30,6 +30,31 @@ no longer twelve points, the script aborts rather than silently drawing somethin
 
 ---
 
+## `generate_pst.py` — the engine's piece-square tables
+
+Generates the eight tables in `engine/Evaluation.kt` from principles written down in the
+script itself.
+
+```bash
+python3 tools/generate_pst.py            # print the Kotlin block, paste it in
+python3 tools/generate_pst.py --check     # verify Evaluation.kt matches the derivation
+```
+
+No dependencies. `--check` is the useful one: it is what catches a table that has been
+edited by hand and no longer means what the script says it means.
+
+⚠️ **The point is provenance, not tuning.** Piece-square tables are the most-copied
+artefact in computer chess, and the best-known set is published under CC BY-SA 3.0 —
+share-alike, which an Apache-2.0 project cannot satisfy. Tables derived from stated chess
+principles have a history that can be re-run and checked. Do not replace this with a
+tuning loop that fits values to game results; that would put the question straight back.
+
+The script asserts that every table is mirrored across the files. A table that is not
+would make the engine prefer one wing for no reason, and the only thing that would ever
+notice is `EvaluationTest.startPositionIsBalanced`.
+
+---
+
 ## `generate_app_icon.py` — the app icon and the in-app mark
 
 Generates three drawables from one description of the artwork — a **queen beside a king**:
