@@ -68,7 +68,9 @@ fun PlayerPanel(
      *
      * It then carries no action buttons: nobody sits at that edge of the table, and a
      * second set of controls facing an empty chair only invites a misclick. Everything
-     * stays reachable from the human's own panel.
+     * stays reachable from the human's own panel. The headline text already says "device",
+     * but that is easy to miss mid-game, so the icon buttons are replaced by a static badge
+     * instead of just leaving the row empty.
      */
     isEngine: Boolean = false,
 ) {
@@ -125,7 +127,9 @@ fun PlayerPanel(
                     )
                 }
 
-                if (!compact && !isEngine) {
+                if (isEngine) {
+                    EngineIcon()
+                } else if (!compact) {
                     Actions(over, state.canTakeback && allowTakeback, clockEnabled,
                         clockRunning, onToggleClock, onTakeback, onSwapSides, onNewGame, onExit)
                 }
@@ -203,6 +207,17 @@ private fun ActionButton(
             tint = MaterialTheme.colorScheme.primary,
         )
     }
+}
+
+/** The badge that stands in for the (absent) action buttons on the device's panel. */
+@Composable
+private fun EngineIcon() {
+    Icon(
+        painter = painterResource(R.drawable.ic_engine_opponent),
+        contentDescription = stringResource(R.string.engine_side_icon),
+        tint = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.size(32.dp),
+    )
 }
 
 internal enum class Outcome { WON, LOST, DRAW, RUNNING }

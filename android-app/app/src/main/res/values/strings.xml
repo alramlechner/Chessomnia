@@ -118,6 +118,7 @@
     <string name="opponent_start">Start</string>
     <string name="opponent_headline">%s · device</string>
     <string name="status_thinking">Thinking…</string>
+    <string name="engine_side_icon">This side is played by the device</string>
 
     <!-- Promotion -->
     <string name="promotion_title">Promote to</string>
