@@ -4,7 +4,7 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project
 uses [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.3.1] — 2026-09-12
 
 ### Added
 - **An optional opponent.** The home screen now offers the choice directly:
@@ -40,8 +40,18 @@ uses [Semantic Versioning](https://semver.org/).
   Taking a move back against the device undoes both halfmoves, so it is your turn
   again. The opponent is stored with the game, so a restart does not silently
   turn it back into a two-player game.
+- The device's panel carries a CPU-chip badge where a human's panel has its
+  action buttons. The headline already says "device", but that is easy to miss
+  mid-game.
 
 ### Changed
+- **"Report a problem" now suggests `chessomnia@lechners.name`** as the
+  recipient via `EXTRA_EMAIL`, for whichever mail app is picked from the share
+  sheet. It is a hint the receiving app may prefill, not a fixed destination —
+  every other app the share sheet offers ignores it, and the report itself is
+  still built and sent the same way as before.
+- The German name for the weakest opponent strength is now "Schach lernen"
+  (was "Lernt die Züge").
 - **The store listing and README now describe the app that exists.** Both still
   led with "it is NOT a chess computer — there is no engine, no opponent to play
   against", which was true when it was written and became exactly wrong when the
