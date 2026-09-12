@@ -483,7 +483,9 @@ used to do from every screen.
 `BugReportButton` (in the main menu and in the settings) asks for a description and pushes
 the finished report into any app via `Intent.ACTION_SEND`. Deliberately **no** transport of
 its own — no upload, no mail: the report is plain text, and where it goes is decided by the
-user in the share sheet.
+user in the share sheet. `EXTRA_EMAIL` suggests `chessomnia@lechners.name` to whichever
+mail app the user might pick; it is only a hint the receiving app may prefill, not a fixed
+destination, so the share sheet still lists every app that handles `text/plain`.
 
 The report contains everything needed to reproduce: starting position, **all moves in long
 algebraic notation**, the current FEN, an ASCII board, status, halfmove clock, thinking

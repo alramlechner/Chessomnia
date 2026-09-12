@@ -15,11 +15,14 @@ import name.lechners.chessomnia.R
  * other app via Android's share sheet.
  *
  * Deliberately no transport of its own (no upload, no mail): the report is plain text,
- * and where it goes is the user's decision in the share dialog.
+ * and where it goes is the user's decision in the share dialog. [EXTRA_EMAIL] only
+ * suggests an address to whichever mail app the user picks there; it does not narrow
+ * the chooser or change that the user decides where the report actually goes.
  *
  * [buildReport] receives the description and returns the complete text, so the game is
  * collected when it is shared, not already when the dialog opens.
  */
+private const val REPORT_EMAIL = "chessomnia@lechners.name"
 @Composable
 fun BugReportButton(
     buildReport: (String) -> String,
@@ -83,6 +86,7 @@ private fun BugReportDialog(
                 val text = buildReport(description)
                 val intent = Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(REPORT_EMAIL))
                     putExtra(Intent.EXTRA_SUBJECT, subject)
                     putExtra(Intent.EXTRA_TEXT, text)
                 }

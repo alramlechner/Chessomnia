@@ -208,3 +208,8 @@ the text needed to reproduce a position. See [CONTRIBUTING.md](CONTRIBUTING.md).
 Please note the scope: pull requests that add an evaluation display, move suggestions or
 online play will be declined, however well written — as will ones that make the opponent
 stronger. That boundary is the product.
+
+## Impressum
+
+`chessomnia@lechners.name` — the address the in-app *Report a problem* button suggests,
+and the one to write to for anything else concerning this app.

@@ -52,6 +52,10 @@ The report is handed to Android's standard share sheet. **You** choose where it 
 email app, a messenger, a notes app, or nowhere. The app itself sends nothing and has no
 means of doing so. You see the full text before you share it.
 
+If you pick an email app, it is offered `chessomnia@lechners.name` as the recipient —
+a suggestion the email app is free to prefill or ignore, not a fixed destination. Picking
+any other kind of app ignores it entirely.
+
 ## Children
 
 The app is suitable for all ages. Because it collects no data whatsoever, it collects no

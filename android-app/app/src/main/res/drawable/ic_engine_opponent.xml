@@ -1,71 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  This side is played by the device: a brain with a circuit trace on each side
-  and one at the stem, so it reads as "artificial" rather than as an actual
-  anatomical brain.
-  Own work, Apache-2.0. Drawn on a 24x24 grid with a 2dp stroke and round
-  caps, so it reads as part of the same set as the action icons.
+  This side is played by the device: a CPU chip, so it reads as "computer" at
+  a glance. Replaces the earlier hand-drawn brain-and-circuit motif with the
+  "icon-computer-simple" variant supplied for this exact size class (badges,
+  20 to 36dp); see the accompanying readme for the medium/detail variants
+  meant for larger UI.
   No android:tint here: Compose's Icon() applies the colour via a filter,
   which lets the icon follow the panel's colour role.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-    <!-- right hemisphere -->
+    android:viewportWidth="128"
+    android:viewportHeight="128">
     <path
-        android:pathData="M12 6.2 C14.8 5.1 17.6 6.7 17.5 9.9 C19.3 10.5 19.6 12.7 18.3 14.1 C19 16.4 16.9 18.5 14.5 18.1 C13.6 19.1 12 19.1 12 17.9"
+        android:pathData="M8,8 H120 V120 H8 Z"
         android:fillColor="#00000000"
         android:strokeColor="#FF000000"
-        android:strokeWidth="2"
+        android:strokeWidth="5"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
-    <!-- left hemisphere: the same path, mirrored about the centre -->
-    <group android:pivotX="12" android:pivotY="0" android:scaleX="-1" android:scaleY="1">
-        <path
-            android:pathData="M12 6.2 C14.8 5.1 17.6 6.7 17.5 9.9 C19.3 10.5 19.6 12.7 18.3 14.1 C19 16.4 16.9 18.5 14.5 18.1 C13.6 19.1 12 19.1 12 17.9"
-            android:fillColor="#00000000"
-            android:strokeColor="#FF000000"
-            android:strokeWidth="2"
-            android:strokeLineCap="round"
-            android:strokeLineJoin="round" />
-    </group>
-    <!-- hemisphere split -->
     <path
-        android:pathData="M12 6.6 V17.9"
+        android:pathData="M46,46 H82 V82 H46 Z"
         android:fillColor="#00000000"
         android:strokeColor="#FF000000"
-        android:strokeWidth="2"
-        android:strokeLineCap="round" />
-    <!-- circuit trace, right, with its node -->
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
     <path
-        android:pathData="M17.7 10.1 H20.6"
+        android:pathData="M46 56h-10M46 72h-10M82 56h10M82 72h10M56 46v-10M72 46v-10M56 82v10M72 82v10"
         android:fillColor="#00000000"
         android:strokeColor="#FF000000"
-        android:strokeWidth="2"
-        android:strokeLineCap="round" />
-    <path
-        android:pathData="M21.4 10.1 A1.2 1.2 0 1 0 23.8 10.1 A1.2 1.2 0 1 0 21.4 10.1 Z"
-        android:fillColor="#FF000000" />
-    <!-- circuit trace, left, with its node -->
-    <path
-        android:pathData="M6.3 10.1 H3.4"
-        android:fillColor="#00000000"
-        android:strokeColor="#FF000000"
-        android:strokeWidth="2"
-        android:strokeLineCap="round" />
-    <path
-        android:pathData="M0.2 10.1 A1.2 1.2 0 1 0 2.6 10.1 A1.2 1.2 0 1 0 0.2 10.1 Z"
-        android:fillColor="#FF000000" />
-    <!-- circuit trace, stem, with its node -->
-    <path
-        android:pathData="M12 17.9 V20.2"
-        android:fillColor="#00000000"
-        android:strokeColor="#FF000000"
-        android:strokeWidth="2"
-        android:strokeLineCap="round" />
-    <path
-        android:pathData="M10.8 21.6 A1.2 1.2 0 1 0 13.2 21.6 A1.2 1.2 0 1 0 10.8 21.6 Z"
-        android:fillColor="#FF000000" />
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
 </vector>
