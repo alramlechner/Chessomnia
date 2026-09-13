@@ -29,6 +29,7 @@ import name.lechners.chessomnia.rules.Piece
 import name.lechners.chessomnia.rules.PieceType
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.rules.Square
+import name.lechners.chessomnia.ui.board.MoveAnimation
 
 /**
  * The shortest the device is allowed to take over a move.
@@ -66,6 +67,8 @@ data class GameUiState(
     val engineSide: Side? = null,
     /** The device is searching for its reply. */
     val thinking: Boolean = false,
+    /** The device's move to show arriving, or null if there is nothing to show. */
+    val moveAnimation: MoveAnimation? = null,
 ) {
     val checkedKingSquare: Square?
         get() {
@@ -91,7 +94,8 @@ data class GameUiState(
             lastMove == other.lastMove && canTakeback == other.canTakeback &&
             moveCount == other.moveCount && halfmoveClock == other.halfmoveClock &&
             showCoordinates == other.showCoordinates &&
-            engineSide == other.engineSide && thinking == other.thinking
+            engineSide == other.engineSide && thinking == other.thinking &&
+            moveAnimation == other.moveAnimation
     }
 
     override fun hashCode(): Int {
@@ -142,6 +146,16 @@ class GameViewModel(
      * decidable; every field here is touched only on the main dispatcher.
      */
     private var engineGeneration = 0
+
+    /**
+     * The device's last move, for the board to show it arriving - see [MoveAnimation].
+     *
+     * Cleared by everything that makes it stale: one's own move, a takeback, a new game,
+     * and leaving the board. Without the last of those, coming back from the menu an hour
+     * later would replay a capture as though it had just happened.
+     */
+    private var moveAnimation: MoveAnimation? = null
+    private var moveAnimationKey = 0
 
     private var thinking = false
 
@@ -241,6 +255,7 @@ class GameViewModel(
     fun takeback() {
         cancelEngine()
         takeBackToHumanTurn(game, opponent?.humanPlays)
+        moveAnimation = null
         persist()
         publish(Selection.None)
         // ⚠️ Not always a no-op. Playing Black, taking back the device's opening move
@@ -264,7 +279,9 @@ class GameViewModel(
         // the clock back on behind the menu, and the thinking time would be wrong.
         cancelEngine()
         game.pauseClock(now())
+        moveAnimation = null
         persist()
+        publish(_ui.value.selection)
         publishClock()
     }
 
@@ -291,6 +308,7 @@ class GameViewModel(
         cancelEngine()
         this.opponent = opponent
         game = ChessGame.newGame(prefs.settings.value.clockEnabled)
+        moveAnimation = null
         persist()
         publish(Selection.None)
         maybeStartEngine()
@@ -309,6 +327,7 @@ class GameViewModel(
 
     private fun commit(move: Move) {
         game.apply(move, now())
+        moveAnimation = null
         persist()
         publish(Selection.None)
         maybeStartEngine()
@@ -349,8 +368,14 @@ class GameViewModel(
                 val elapsed = now() - startedAt
                 if (elapsed < MIN_THINKING_MS) delay(MIN_THINKING_MS - elapsed)
 
-                if (generation == engineGeneration && move != null) {
-                    game.apply(move, now())
+                if (generation == engineGeneration && move != null && game.apply(move, now())) {
+                    val capture = game.lastCapture
+                    moveAnimation = MoveAnimation(
+                        key = ++moveAnimationKey,
+                        move = move,
+                        captured = capture?.piece,
+                        capturedSquare = capture?.square,
+                    )
                     persist()
                     publish(Selection.None)
                 }
@@ -399,6 +424,7 @@ class GameViewModel(
             capturedByBlack = game.capturedBy(Side.BLACK),
             engineSide = opponent?.enginePlays,
             thinking = thinking,
+            moveAnimation = moveAnimation,
         )
         publishClock()
     }

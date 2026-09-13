@@ -134,7 +134,7 @@ fun ConfirmOverlay(
 }
 
 @StringRes
-private fun pieceNameRes(type: PieceType): Int = when (type) {
+internal fun pieceNameRes(type: PieceType): Int = when (type) {
     PieceType.QUEEN -> R.string.piece_queen
     PieceType.ROOK -> R.string.piece_rook
     PieceType.BISHOP -> R.string.piece_bishop

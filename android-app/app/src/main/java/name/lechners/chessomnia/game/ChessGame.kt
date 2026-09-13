@@ -4,6 +4,14 @@ import name.lechners.chessomnia.game.clock.ClockState
 import name.lechners.chessomnia.rules.*
 
 /**
+ * A piece a move took, and the square it stood on.
+ *
+ * The square is carried rather than derived from the move: for en passant the victim is
+ * NOT on the move's target square, and whoever draws it would put it a rank off.
+ */
+data class Capture(val piece: Piece, val square: Square)
+
+/**
  * A game in progress: position, move history, repetition counter and status.
  *
  * Takebacks go through `Position.unmakeMove` - the same function the move generator's
@@ -49,6 +57,12 @@ class ChessGame private constructor(
     val halfmoveClock: Int get() = position.halfmoveClock
     val canTakeback: Boolean get() = history.isNotEmpty()
     val lastMove: Move? get() = history.lastOrNull()?.move
+
+    /** What the last move took, or null if it took nothing. */
+    val lastCapture: Capture?
+        get() = history.lastOrNull()?.undo?.let { undo ->
+            undo.captured?.let { Capture(it, Square(undo.capturedSquare)) }
+        }
 
     /** The side currently in check, or null. Deliberately not part of [status]. */
     var inCheck: Side? = null

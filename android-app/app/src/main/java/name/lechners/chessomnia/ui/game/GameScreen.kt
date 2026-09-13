@@ -16,8 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import kotlinx.coroutines.delay
 import name.lechners.chessomnia.R
 import name.lechners.chessomnia.rules.GameStatus
+import name.lechners.chessomnia.rules.Piece
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.ui.board.ChessBoard
 
@@ -80,6 +82,7 @@ fun GameScreen(
     // unreadable for the one person who is actually at the table.
     val topIsEngine = state.engineSide != null && state.engineSide == top
 
+
     // The system back gesture closes whatever is on top first. Without this it would
     // fall straight through to the activity and leave the app, which is exactly what it
     // used to do.
@@ -139,12 +142,25 @@ fun GameScreen(
                     onSquareTap = vm::onSquareTap,
                     modifier = Modifier.size(min(maxWidth, maxHeight)),
                     piecesHidden = curtain,
+                    animation = state.moveAnimation,
                 )
 
                 if (curtain) {
                     PauseCurtain(
                         onResume = vm::startOrResumeClock,
                         modifier = Modifier.size(min(maxWidth, maxHeight)),
+                    )
+                }
+
+                // Towards the device's edge, where the piece it took joins its captured
+                // row - but turned towards whoever is actually sitting at this board.
+                if (!curtain) {
+                    CapturedPieceFlight(
+                        animation = state.moveAnimation,
+                        boardSize = min(maxWidth, maxHeight),
+                        bottomSide = bottom,
+                        towardsTop = topIsEngine,
+                        rotated = !topIsEngine,
                     )
                 }
             }

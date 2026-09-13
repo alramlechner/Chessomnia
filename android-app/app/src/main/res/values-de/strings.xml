@@ -112,6 +112,7 @@
     <string name="opponent_headline">%s · Gerät</string>
     <string name="status_thinking">denkt …</string>
     <string name="engine_side_icon">Diese Seite wird vom Gerät gespielt</string>
+    <string name="capture_spotlight">Das Gerät hat deinen %s geschlagen</string>
 
     <!-- Umwandlung -->
     <string name="promotion_title">Umwandeln in</string>

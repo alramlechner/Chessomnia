@@ -1,9 +1,17 @@
 package name.lechners.chessomnia.ui.board
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -22,11 +30,20 @@ import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.util.lerp
 import name.lechners.chessomnia.rules.Move
 import name.lechners.chessomnia.rules.MoveKind
 import name.lechners.chessomnia.rules.Piece
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.rules.Square
+
+/**
+ * How long the device's piece takes to cross the board.
+ *
+ * Long enough to be followed, short enough not to be waited for: the device already owes
+ * a minimum thinking time before this even starts.
+ */
+const val SLIDE_MS = 300
 
 /**
  * The board - a single Canvas instead of 64 composables.
@@ -48,6 +65,11 @@ fun ChessBoard(
     onSquareTap: (Square) -> Unit,
     modifier: Modifier = Modifier,
     /**
+     * A move to show arriving rather than already arrived. See [MoveAnimation] for why
+     * only some moves get one.
+     */
+    animation: MoveAnimation? = null,
+    /**
      * Draws the empty board: no pieces, no hints, no highlights. Used by the pause
      * curtain, where the point is that the position cannot be studied while the clock
      * is stopped. The squares and the coordinates stay - they carry no information
@@ -61,6 +83,33 @@ fun ChessBoard(
     // The gesture detector is built only once; without this indirection it would keep
     // computing with the old orientation after a side swap.
     val bottom = rememberUpdatedState(bottomSide)
+
+    // What is in the air right now, and how far along it is. Null between moves, which is
+    // almost always: then everything below draws the board exactly as it did before.
+    var flight by remember { mutableStateOf<MoveAnimation?>(null) }
+    val progress = remember { Animatable(1f) }
+    // Initialised from the key that is already there, so the first composition shows the
+    // position as it stands instead of replaying the move that produced it. That is the
+    // difference between a move landing and a screen coming back.
+    var seenKey by remember { mutableStateOf(animation?.key) }
+
+    LaunchedEffect(animation?.key) {
+        val next = animation
+        if (next == null || next.key == seenKey) {
+            flight = null
+            return@LaunchedEffect
+        }
+        seenKey = next.key
+        flight = next
+        try {
+            progress.snapTo(0f)
+            progress.animateTo(1f, tween(SLIDE_MS, easing = FastOutSlowInEasing))
+        } finally {
+            // Also on cancellation - moving while the device's piece is still travelling
+            // would otherwise leave that piece frozen in mid-board for good.
+            flight = null
+        }
+    }
 
     Canvas(
         modifier = modifier.pointerInput(Unit) {
@@ -86,7 +135,31 @@ fun ChessBoard(
             // Making exactly those visible is the actual learning effect.
             for (m in hints) drawSecondarySquares(geo, m)
 
-            drawPieces(geo, board, painters, bottomSide)
+            val moving = flight
+            val travelled = progress.value
+            val slides = moving?.let { slidesOf(it.move, board) } ?: emptyList()
+
+            // The travelling pieces are drawn last, on their way; their target squares are
+            // therefore left empty here rather than showing them already arrived.
+            drawPieces(geo, board, painters, bottomSide, skip = slides.mapTo(HashSet()) { it.to.index })
+
+            // A piece that is being taken stays on its square for the whole slide, under
+            // the piece coming to take it. It is not removed here at all: when the slide
+            // ends, CapturedPieceFlight picks it up and floats it out to the edge.
+            val victim = moving?.captured
+            val victimSquare = moving?.capturedSquare
+            if (victim != null && victimSquare != null) {
+                painters[victim]?.let {
+                    drawPieceAt(
+                        geo, victim, it,
+                        geo.originXOf(victimSquare), geo.originYOf(victimSquare), bottomSide,
+                    )
+                }
+            }
+
+            for (slide in slides) {
+                painters[slide.piece]?.let { drawSlide(geo, slide, it, bottomSide, travelled) }
+            }
 
             for (m in hints) drawMoveHint(geo, m, board)
         }
@@ -165,24 +238,83 @@ private fun DrawScope.drawPieces(
     board: Array<Piece?>,
     painters: Map<Piece, VectorPainter>,
     bottomSide: Side,
+    /** Squares whose piece is drawn elsewhere this frame, because it is in flight. */
+    skip: Set<Int> = emptySet(),
 ) {
-    val s = geo.squareSizePx
     for (rank in 0..7) {
         for (file in 0..7) {
             val sq = Square.of(file, rank)
+            if (sq.index in skip) continue
             val piece = board[sq.index] ?: continue
             val painter = painters[piece] ?: continue
-            val x = geo.originXOf(sq)
-            val y = geo.originYOf(sq)
-            if (piece.side == bottomSide) {
-                translate(left = x, top = y) { with(painter) { draw(Size(s, s)) } }
-            } else {
-                rotate(degrees = 180f, pivot = Offset(x + s / 2f, y + s / 2f)) {
-                    translate(left = x, top = y) { with(painter) { draw(Size(s, s)) } }
-                }
-            }
+            drawPieceAt(geo, piece, painter, geo.originXOf(sq), geo.originYOf(sq), bottomSide)
         }
     }
+}
+
+/** One piece at a free position, not necessarily on a square - a slide ends between two. */
+private fun DrawScope.drawPieceAt(
+    geo: BoardGeometry,
+    piece: Piece,
+    painter: VectorPainter,
+    x: Float,
+    y: Float,
+    bottomSide: Side,
+    alpha: Float = 1f,
+) {
+    val s = geo.squareSizePx
+    if (piece.side == bottomSide) {
+        translate(left = x, top = y) { with(painter) { draw(Size(s, s), alpha = alpha) } }
+    } else {
+        rotate(degrees = 180f, pivot = Offset(x + s / 2f, y + s / 2f)) {
+            translate(left = x, top = y) { with(painter) { draw(Size(s, s), alpha = alpha) } }
+        }
+    }
+}
+
+/** A piece on its way, [travelled] of the distance done. */
+private fun DrawScope.drawSlide(
+    geo: BoardGeometry,
+    slide: Slide,
+    painter: VectorPainter,
+    bottomSide: Side,
+    travelled: Float,
+) = drawPieceAt(
+    geo, slide.piece, painter,
+    lerp(geo.originXOf(slide.from), geo.originXOf(slide.to), travelled),
+    lerp(geo.originYOf(slide.from), geo.originYOf(slide.to), travelled),
+    bottomSide,
+)
+
+private data class Slide(val piece: Piece, val from: Square, val to: Square)
+
+/**
+ * The pieces one move puts in motion: its own, and for castling the rook as well — a king
+ * gliding while its rook jumps would look like two different rules.
+ *
+ * Read from the board AFTER the move, so a promotion carries the piece that now stands
+ * there rather than the pawn that set off.
+ */
+private fun slidesOf(move: Move, board: Array<Piece?>): List<Slide> {
+    val mover = board[move.to.index] ?: return emptyList()
+    val main = Slide(mover, move.from, move.to)
+
+    // Same file arithmetic as drawSecondarySquares: the rook ends up beside the king.
+    val rookFrom: Square
+    val rookTo: Square
+    when (move.kind) {
+        MoveKind.CASTLE_KINGSIDE -> {
+            rookFrom = Square(move.to.index + 1)
+            rookTo = Square(move.to.index - 1)
+        }
+        MoveKind.CASTLE_QUEENSIDE -> {
+            rookFrom = Square(move.to.index - 2)
+            rookTo = Square(move.to.index + 1)
+        }
+        else -> return listOf(main)
+    }
+    val rook = board[rookTo.index] ?: return listOf(main)
+    return listOf(main, Slide(rook, rookFrom, rookTo))
 }
 
 /**

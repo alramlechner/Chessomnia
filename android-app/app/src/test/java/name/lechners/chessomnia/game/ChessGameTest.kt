@@ -1,6 +1,7 @@
 package name.lechners.chessomnia.game
 
 import name.lechners.chessomnia.rules.GameStatus
+import name.lechners.chessomnia.rules.Piece
 import name.lechners.chessomnia.rules.Side
 import name.lechners.chessomnia.rules.Square
 import org.junit.Assert.assertEquals
@@ -149,6 +150,31 @@ class ChessGameTest {
         assertEquals(1, g.capturedBy(Side.WHITE).size)
         g.takeback()
         assertTrue(g.capturedBy(Side.WHITE).isEmpty())
+    }
+
+    @Test
+    fun lastCaptureNamesThePieceAndTheSquareItStoodOn() {
+        val g = ChessGame.newGame(clockEnabled = false)
+        g.play("e2e4")
+        assertNull("a quiet move takes nothing", g.lastCapture)
+
+        g.play("d7d5")
+        g.play("e4d5")
+        val capture = g.lastCapture ?: error("exd5 took a pawn")
+        assertEquals(Piece.B_PAWN, capture.piece)
+        assertEquals(Square.parse("d5"), capture.square)
+    }
+
+    @Test
+    fun lastCapturePutsAnEnPassantVictimOnItsOwnSquare() {
+        // The whole reason the square is carried rather than read off the move: here the
+        // pawn that is taken stands on d5, while the move ends on d6. Anything drawing the
+        // victim from the move's target would put it a rank too far.
+        val g = ChessGame.newGame(clockEnabled = false)
+        for (m in listOf("e2e4", "a7a6", "e4e5", "d7d5", "e5d6")) g.play(m)
+        val capture = g.lastCapture ?: error("exd6 e.p. took a pawn")
+        assertEquals(Piece.B_PAWN, capture.piece)
+        assertEquals(Square.parse("d5"), capture.square)
     }
 
     @Test

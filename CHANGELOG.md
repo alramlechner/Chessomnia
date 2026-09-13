@@ -4,6 +4,22 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project
 uses [Semantic Versioning](https://semver.org/).
 
+## [1.3.2] — 2026-09-13
+
+### Added
+- **The device's move can be watched arriving.** Its piece slides across the board
+  instead of appearing, and a piece it takes no longer vanishes: it stays put until
+  the piece taking it has arrived, then floats out to the edge of the board, growing
+  on the way, and waits there for ten seconds before fading.
+
+  Both answer the same complaint — that a capture by the device was over before it
+  was noticed. The slide catches the eye in the moment; the piece waiting at the edge
+  is for looking up a moment too late, which an animation alone cannot do. It rests
+  in the free space beside the board, so it covers no square.
+
+  Moves made by a hand at this table are deliberately left alone. They were watched
+  being made, and sliding them would only put a delay between a tap and its answer.
+
 ## [1.3.1] — 2026-09-12
 
 ### Added
