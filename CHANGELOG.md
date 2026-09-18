@@ -4,6 +4,12 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project
 uses [Semantic Versioning](https://semver.org/).
 
+## [1.3.3] — 2026-09-18
+
+### Added
+- **Spanish.** The app, its licences page and the Play Store listing are now
+  available in Spanish alongside English and German.
+
 ## [1.3.2] — 2026-09-13
 
 ### Added
