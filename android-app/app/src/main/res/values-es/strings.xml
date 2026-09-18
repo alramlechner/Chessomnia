@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Traducción al español. Mismo orden y las mismas claves que en values/strings.xml —
+  una clave que falte aquí cae silenciosamente al inglés y aparece como una línea en
+  inglés en medio de la interfaz en español.
+-->
+<resources>
+    <!-- app_name no se traduce -->
+
+    <!-- Compartido -->
+    <string name="common_cancel">Cancelar</string>
+    <string name="common_yes">Sí</string>
+    <string name="side_white">las blancas</string>
+    <string name="side_black">las negras</string>
+
+    <!-- Pantalla de inicio -->
+    <string name="home_tagline">El tablero de ajedrez para tu mesa</string>
+    <string name="home_resume">Reanudar partida</string>
+    <plurals name="home_moves_played">
+        <item quantity="one">%d jugada realizada</item>
+        <item quantity="other">%d jugadas realizadas</item>
+    </plurals>
+    <string name="home_new_game">Dos jugadores</string>
+    <string name="home_settings">Ajustes</string>
+    <string name="home_version">Versión %s</string>
+    <string name="home_footer">Sin anuncios, sin cuenta, sin internet.</string>
+    <string name="home_confirm_new_title">¿Empezar una partida nueva?</string>
+    <plurals name="home_confirm_new_text">
+        <item quantity="one">Se perderá la partida actual con %d jugada.</item>
+        <item quantity="other">Se perderá la partida actual con %d jugadas.</item>
+    </plurals>
+    <string name="home_confirm_new_confirm">Empezar de nuevo</string>
+
+    <!-- Ajustes -->
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_back">‹ Menú</string>
+
+    <string name="settings_section_clock">Tiempo de reflexión</string>
+    <string name="settings_clock_title">Contar el tiempo de reflexión</string>
+    <string name="settings_clock_desc">Muestra cuánto ha pensado cada jugador en total, sumando todas sus jugadas. El reloj nunca se agota ni termina la partida.</string>
+
+    <string name="settings_section_hints">Ayudas de aprendizaje</string>
+    <string name="settings_hints_title">Mostrar jugadas legales</string>
+    <string name="settings_hints_desc">Al tocar una pieza se marcan todas las casillas a las que puede moverse.</string>
+    <string name="settings_coords_title">Mostrar coordenadas</string>
+    <string name="settings_coords_desc">Columnas a–h y filas 1–8 en el borde del tablero.</string>
+    <string name="settings_allow_takeback_title">Permitir deshacer jugadas</string>
+    <string name="settings_allow_takeback_desc">Muestra el botón para deshacer durante la partida. Deshacer una jugada siempre pide confirmación antes.</string>
+
+    <string name="settings_section_screen">Pantalla</string>
+    <string name="settings_keep_screen_on_title">Mantener la pantalla encendida</string>
+    <string name="settings_keep_screen_on_desc">El dispositivo no se apagará durante una partida.</string>
+
+    <string name="settings_section_bugreport">Informar de un problema</string>
+    <string name="settings_bugreport_desc">Envía la partida actual con todas sus jugadas como texto sin formato a una app de tu elección — suficiente para reproducir exactamente una posición discutida.</string>
+
+    <string name="settings_section_about">Acerca de</string>
+    <string name="settings_about_desc">Chessomnia sustituye al tablero físico de ajedrez — juega contra alguien en la misma mesa o contra el dispositivo. No hay evaluación de posición ni sugerencia de jugadas.</string>
+    <string name="settings_about_credits">Piezas de ajedrez: Colin M. L. Burnett (\"Cburnett\"), Wikimedia Commons. Logotipo compuesto en Montserrat.</string>
+    <string name="settings_about_licenses">Mostrar licencias</string>
+    <string name="settings_about_source">Código fuente en GitHub</string>
+    <string name="settings_about_no_browser">No se encontró ninguna app para abrir el enlace.</string>
+
+    <!-- Cortina de pausa sobre el tablero -->
+    <string name="paused">Pausa</string>
+    <string name="paused_tap_to_resume">Toca para continuar</string>
+
+    <!-- Licencias -->
+    <string name="licenses_title">Licencias</string>
+    <string name="licenses_back">‹ Ajustes</string>
+
+    <!-- Panel del jugador: resultado -->
+    <string name="outcome_won">Ganada</string>
+    <string name="outcome_lost">Perdida</string>
+    <string name="outcome_draw">Tablas</string>
+
+    <!-- Panel del jugador: por qué terminó la partida -->
+    <string name="reason_checkmate">Jaque mate — ganan %s</string>
+    <string name="reason_resigned">Abandono — ganan %s</string>
+    <string name="reason_stalemate">Ahogado — el jugador en turno no tiene ninguna jugada legal</string>
+    <string name="reason_fifty_move">50 jugadas sin mover un peón y sin capturas</string>
+    <string name="reason_threefold">La misma posición por tercera vez</string>
+    <string name="reason_insufficient_material">No queda material suficiente para dar mate</string>
+    <string name="reason_agreed_draw">Tablas acordadas</string>
+
+    <!-- Panel del jugador: partida en curso -->
+    <string name="status_check">¡Jaque! Es tu turno</string>
+    <string name="status_your_turn">Es tu turno</string>
+    <string name="status_opponent_turn">Tu oponente debe mover</string>
+
+    <!-- Acciones del panel del jugador. Son botones de icono, así que los textos
+         siguientes son descripciones para accesibilidad y no etiquetas visibles:
+         pueden y deben ser más explícitos que una etiqueta. "Deshacer jugada" en
+         vez de "Atrás", porque junto a un botón de menú principal "Atrás" se lee
+         como navegación. -->
+    <string name="action_takeback">Deshacer la jugada</string>
+    <string name="action_menu">Menú principal</string>
+    <string name="action_pause">Pausar el reloj</string>
+    <string name="action_start_clock">Iniciar el reloj</string>
+    <string name="action_swap_colours">Girar el tablero</string>
+    <string name="action_new_game">Empezar una partida nueva</string>
+
+    <!-- Jugar contra el dispositivo -->
+    <string name="home_play_device">Jugar contra el dispositivo</string>
+    <string name="opponent_dialog_title">Jugar contra el dispositivo</string>
+    <string name="opponent_strength">Nivel</string>
+    <string name="opponent_level_learning">Aprendiendo las jugadas</string>
+    <string name="opponent_level_beginner">Principiante</string>
+    <string name="opponent_level_casual">Aficionado</string>
+    <string name="opponent_level_club">Jugador de club</string>
+    <string name="opponent_colour">Tú juegas</string>
+    <string name="opponent_start">Empezar</string>
+    <string name="opponent_headline">%s · dispositivo</string>
+    <string name="status_thinking">Pensando…</string>
+    <string name="engine_side_icon">Este lado lo juega el dispositivo</string>
+    <string name="capture_spotlight">El dispositivo capturó tu %s</string>
+
+    <!-- Coronación -->
+    <string name="promotion_title">Coronar a</string>
+    <string name="piece_queen">Dama</string>
+    <string name="piece_rook">Torre</string>
+    <string name="piece_bishop">Alfil</string>
+    <string name="piece_knight">Caballo</string>
+    <string name="piece_pawn">Peón</string>
+    <string name="piece_king">Rey</string>
+
+    <!-- Confirmaciones -->
+    <string name="confirm_takeback_title">¿Deshacer la jugada?</string>
+    <string name="confirm_takeback_text">Se deshará la última jugada.</string>
+    <string name="confirm_new_game_title">¿Empezar una partida nueva?</string>
+    <plurals name="confirm_new_game_text">
+        <item quantity="one">Se perderá la partida actual con %d jugada.</item>
+        <item quantity="other">Se perderá la partida actual con %d jugadas.</item>
+    </plurals>
+
+    <!-- Indicador de las 50 jugadas -->
+    <plurals name="fifty_move_remaining">
+        <item quantity="one">Regla de las 50 jugadas: queda %d jugada</item>
+        <item quantity="other">Regla de las 50 jugadas: quedan %d jugadas</item>
+    </plurals>
+
+    <!-- Informe de errores -->
+    <string name="bugreport_button">Informar de un problema</string>
+    <string name="bugreport_title">Informar de un problema</string>
+    <string name="bugreport_prompt">¿Qué ha pasado? Cuanto más preciso, mejor — por ejemplo, \"las negras estaban en jaque mate y la app no se dio cuenta\".</string>
+    <string name="bugreport_placeholder">Descripción</string>
+    <string name="bugreport_included">Se incluye: todas las jugadas de la partida actual, la posición actual junto con todas las jugadas legales en ella, la versión de la app y el modelo del dispositivo. Sin datos personales.</string>
+    <string name="bugreport_share">Compartir</string>
+    <string name="bugreport_subject">Informe de error de Chessomnia</string>
+    <string name="bugreport_chooser">Compartir informe de error</string>
+</resources>

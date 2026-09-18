@@ -8,7 +8,7 @@ import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
- * Guards English and German against drifting apart.
+ * Guards English and its translations (German, Spanish) against drifting apart.
  *
  * This exists because nothing else catches it. `MissingTranslation` and
  * `ExtraTranslation` are lint checks that only run as part of
@@ -17,11 +17,11 @@ import javax.xml.parsers.DocumentBuilderFactory
  * at all. A pure-JVM test does not care about that setting and cannot be
  * skipped by accident.
  *
- * What it deliberately does *not* check: that every English string has a German
- * one. Two keys are marked `translatable="false"` (the app name and an empty
- * placeholder) and correctly have no translation; the test derives that set
- * from the attribute rather than hard-coding the two names, so marking a third
- * key untranslatable does not require touching this file.
+ * What it deliberately does *not* check: that every English string has a
+ * translated one. Two keys are marked `translatable="false"` (the app name and
+ * an empty placeholder) and correctly have no translation; the test derives
+ * that set from the attribute rather than hard-coding the two names, so
+ * marking a third key untranslatable does not require touching this file.
  */
 class TranslationParityTest {
 
@@ -65,66 +65,79 @@ class TranslationParityTest {
         Regex("%(?:\\d+\\\$)?[a-zA-Z]").findAll(value).map { it.value }.sorted().toList()
 
     private val en by lazy { parse("values") }
-    private val de by lazy { parse("values-de") }
+    private val translations by lazy { mapOf("de" to parse("values-de"), "es" to parse("values-es")) }
 
     @Test
-    fun everyTranslatableStringHasAGermanCounterpart() {
-        assertEquals(
-            "German is missing translations",
-            emptySet<String>(),
-            en.translatable.keys - de.translatable.keys,
-        )
+    fun everyTranslatableStringHasACounterpartInEachTranslation() {
+        translations.forEach { (locale, t) ->
+            assertEquals(
+                "$locale is missing translations",
+                emptySet<String>(),
+                en.translatable.keys - t.translatable.keys,
+            )
+        }
     }
 
     @Test
-    fun germanHasNoStringsEnglishDoesNotHave() {
-        // Catches a rename applied to only one of the two files: the old key
-        // lingers in German and the new one silently falls back to English.
-        assertEquals(
-            "German has strings absent from English",
-            emptySet<String>(),
-            de.translatable.keys - en.translatable.keys,
-        )
+    fun noTranslationHasStringsEnglishDoesNotHave() {
+        // Catches a rename applied to only one of the files: the old key
+        // lingers in the translation and the new one silently falls back to
+        // English.
+        translations.forEach { (locale, t) ->
+            assertEquals(
+                "$locale has strings absent from English",
+                emptySet<String>(),
+                t.translatable.keys - en.translatable.keys,
+            )
+        }
     }
 
     @Test
     fun untranslatableStringsAreNotTranslated() {
-        assertEquals(
-            "these are marked translatable=false but a German version exists",
-            emptySet<String>(),
-            en.untranslatable intersect de.translatable.keys,
-        )
+        translations.forEach { (locale, t) ->
+            assertEquals(
+                "these are marked translatable=false but a $locale version exists",
+                emptySet<String>(),
+                en.untranslatable intersect t.translatable.keys,
+            )
+        }
     }
 
     @Test
     fun placeholdersMatch() {
-        // A German string with a placeholder the English one does not have
-        // throws IllegalFormatException at runtime — on a German device only,
-        // which is exactly the kind of bug that ships.
-        val mismatched = en.translatable.keys.intersect(de.translatable.keys).filter {
-            placeholders(en.translatable.getValue(it)) != placeholders(de.translatable.getValue(it))
+        // A translated string with a placeholder the English one does not have
+        // throws IllegalFormatException at runtime — on a device in that
+        // language only, which is exactly the kind of bug that ships.
+        translations.forEach { (locale, t) ->
+            val mismatched = en.translatable.keys.intersect(t.translatable.keys).filter {
+                placeholders(en.translatable.getValue(it)) != placeholders(t.translatable.getValue(it))
+            }
+            assertEquals("$locale: format placeholders differ", emptyList<String>(), mismatched)
         }
-        assertEquals("format placeholders differ", emptyList<String>(), mismatched)
     }
 
     @Test
     fun pluralsHaveTheSameQuantities() {
-        assertEquals("plurals missing in German", en.plurals.keys, de.plurals.keys)
-        val mismatched = en.plurals.keys.filter { en.plurals[it] != de.plurals[it] }
-        assertEquals("plural quantities differ", emptyList<String>(), mismatched)
-        // German pluralises like English, so both need exactly one/other.
+        translations.forEach { (locale, t) ->
+            assertEquals("plurals missing in $locale", en.plurals.keys, t.plurals.keys)
+            val mismatched = en.plurals.keys.filter { en.plurals[it] != t.plurals[it] }
+            assertEquals("$locale: plural quantities differ", emptyList<String>(), mismatched)
+        }
+        // English, German and Spanish all pluralise the same way here, so every
+        // language needs exactly one/other.
         en.plurals.forEach { (name, quantities) ->
             assertEquals("$name: unexpected quantities", setOf("one", "other"), quantities)
         }
     }
 
     @Test
-    fun bothLicenceFilesExist() {
+    fun allLicenceFilesExist() {
         // The licences screen renders res/raw/licenses.txt verbatim. Without a
-        // German variant, a German user taps a German button and lands on an
-        // English page — which was the case until this test was written.
-        listOf("raw/licenses.txt", "raw-de/licenses.txt").forEach {
-            assertTrue("missing $it", File(res, it).isFile)
+        // translated variant, a user taps a button in their language and lands
+        // on an English page — which was the case until this test was written.
+        (listOf("raw") + translations.keys.map { "raw-$it" }).forEach {
+            val path = "$it/licenses.txt"
+            assertTrue("missing $path", File(res, path).isFile)
         }
     }
 }
