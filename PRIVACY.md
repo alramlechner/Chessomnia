@@ -68,5 +68,5 @@ repository, together with the date above.
 
 ## Contact
 
-Questions about this policy: open an issue at
+`chessomnia@lechners.name` — or open an issue about this policy at
 <https://github.com/alramlechner/Chessomnia/issues>.
