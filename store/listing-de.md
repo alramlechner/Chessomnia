@@ -103,7 +103,7 @@ Console nachzählen:
 ```bash
 python3 - <<'EOF'
 import re, pathlib
-for f in ("store/listing-en.md", "store/listing-de.md"):
+for f in ("store/listing-en.md", "store/listing-de.md", "store/listing-es.md"):
     b = re.findall(r"```\n(.*?)\n```", pathlib.Path(f).read_text(), re.S)
     print(f, "kurz", len(b[1]), "voll", len(b[2]))
 EOF

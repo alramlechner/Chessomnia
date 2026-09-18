@@ -195,8 +195,8 @@ def main():
   <g transform="translate(64,150) scale({scale})">
     {wm}
   </g>
-  <text x="64" y="250" font-family="Roboto, DejaVu Sans, sans-serif" font-size="27" fill="#8FC4E2">The chess board for two players</text>
-  <text x="64" y="300" font-family="Roboto, DejaVu Sans, sans-serif" font-size="23" fill="#9AA3B2">No engine &#183; no ads &#183; no tracking &#183; works offline</text>
+  <text x="64" y="250" font-family="Roboto, DejaVu Sans, sans-serif" font-size="27" fill="#8FC4E2">Chess for two, or against the device</text>
+  <text x="64" y="300" font-family="Roboto, DejaVu Sans, sans-serif" font-size="23" fill="#9AA3B2">Free &#183; no ads &#183; no tracking &#183; works offline</text>
 
   <!-- Slight tilt so the board reads as an object on a table rather than a
        screenshot pasted onto the canvas. -->

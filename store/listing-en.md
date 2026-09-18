@@ -127,16 +127,10 @@ https://github.com/alramlechner/Chessomnia/blob/main/PRIVACY.md
 |---|---|---|
 | App icon, 512×512 PNG | `store/play-icon-512.png` | ready |
 | Feature graphic, 1024×500 PNG | `store/play-feature-1024x500.png` | ready |
-| Phone screenshots (2–8, min 320px) | — | **must be taken on a device** |
+| Phone screenshots (2–8, min 320px) | `store/screenshots/phone-*.png` | ready, but predates the device opponent — see `store/screenshots/README.md` |
 | 7" tablet screenshots (up to 8) | — | **must be taken on a device** |
-| 10" tablet screenshots (up to 8) | — | **must be taken on a device** |
+| 10" tablet screenshots (up to 8) | `store/screenshots/tablet/*.png` | ready — opening, castling, capture, en passant, check, promotion, checkmate, the device opponent (two levels), and Settings in en/de/es |
 
 Screenshots are deliberately not generated from the vector sources: Google Play
 requires them to show the real app, and a rendered mock-up would misrepresent
-it. Suggested set, in this order:
-
-1. The board mid-game with legal moves shown for a selected piece.
-2. Checkmate — both panels showing the result and the reason, board uncovered.
-3. The promotion dialog, rotated towards the player who triggered it.
-4. The home screen.
-5. Settings.
+it. Full inventory and what each one shows: `store/screenshots/README.md`.
