@@ -198,10 +198,11 @@ def main():
   <text x="64" y="250" font-family="Roboto, DejaVu Sans, sans-serif" font-size="27" fill="#8FC4E2">Chess for two, or against the device</text>
   <text x="64" y="300" font-family="Roboto, DejaVu Sans, sans-serif" font-size="23" fill="#9AA3B2">Free &#183; no ads &#183; no tracking &#183; works offline</text>
 
-  <!-- Slight tilt so the board reads as an object on a table rather than a
-       screenshot pasted onto the canvas. -->
-  <g transform="translate(660,32) rotate(-8 190 190)">
-{board_svg(ranks, 0, 0, 47, border=10)}
+  <!-- Tilted, and large enough to read as the hero of the graphic rather than
+       an illustration beside the text: Play shows this at phone width, where
+       a small board disappears. -->
+  <g transform="translate(560,40) rotate(-8 210 210)">
+{board_svg(ranks, 0, 0, 52, border=10)}
   </g>
 </svg>
 '''
