@@ -152,15 +152,15 @@ fun GameScreen(
                     )
                 }
 
-                // Towards the device's edge, where the piece it took joins its captured
-                // row - but turned towards whoever is actually sitting at this board.
+                // Towards the capturer's edge, where the piece joins its captured row -
+                // turned towards whoever is actually sitting there.
                 if (!curtain) {
                     CapturedPieceFlight(
                         animation = state.moveAnimation,
                         boardSize = min(maxWidth, maxHeight),
                         bottomSide = bottom,
-                        towardsTop = topIsEngine,
-                        rotated = !topIsEngine,
+                        towardsTop = state.moveAnimation?.captured?.side?.opposite == top,
+                        rotated = state.moveAnimation?.captured?.side?.opposite == top && !topIsEngine,
                     )
                 }
             }

@@ -327,7 +327,17 @@ class GameViewModel(
 
     private fun commit(move: Move) {
         game.apply(move, now())
-        moveAnimation = null
+        // Against the device one's own move is never animated; between two people at one
+        // board a capture is, so the piece flies to the capturer's edge for the other to see.
+        val capture = if (opponent == null) game.lastCapture else null
+        moveAnimation = capture?.let {
+            MoveAnimation(
+                key = ++moveAnimationKey,
+                move = move,
+                captured = it.piece,
+                capturedSquare = it.square,
+            )
+        }
         persist()
         publish(Selection.None)
         maybeStartEngine()

@@ -7,9 +7,10 @@ import name.lechners.chessomnia.rules.Square
 /**
  * A move the board should show arriving instead of simply appearing.
  *
- * Only the device's moves get one. A move made by a hand at this table was watched being
- * made, and sliding it would delay the answer to one's own tap; a move made by the device
- * is otherwise a board that has silently changed between two glances.
+ * The device's moves get one, and so do captures between two people at one board. Against
+ * the device, a move made by a hand at this table was watched being made, and sliding it
+ * would delay the answer to one's own tap; a move made by the device is otherwise a board
+ * that has silently changed between two glances.
  *
  * [key] counts moves rather than flagging them. That is what makes "a new move landed"
  * distinguishable from "the same state was published again" — the latter is what a

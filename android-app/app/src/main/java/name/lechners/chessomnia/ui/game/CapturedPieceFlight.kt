@@ -63,7 +63,7 @@ fun CapturedPieceFlight(
     /** The board's edge length. The square grid is derived from it, as on the board. */
     boardSize: Dp,
     bottomSide: Side,
-    /** Which edge it travels to - the one the device's captured row is at. */
+    /** Which edge it travels to - the one the capturer's captured row is at. */
     towardsTop: Boolean,
     /** Turned for whoever is actually sitting at this table. */
     rotated: Boolean,

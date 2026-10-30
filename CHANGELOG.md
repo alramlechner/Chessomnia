@@ -4,6 +4,15 @@ All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project
 uses [Semantic Versioning](https://semver.org/).
 
+## [1.3.4] — 2026-10-30
+
+### Changed
+- **Captures between two people at one board are now animated too.** The piece that
+  is taken floats out to the edge of the board, next to the captured row of whoever
+  took it, and rests there before fading - exactly as it already did for the device's
+  captures. Plain moves are still not slid, and against the device one's own moves
+  stay unanimated.
+
 ## [1.3.3] — 2026-09-18
 
 ### Added
